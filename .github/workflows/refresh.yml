@@ -1,17 +1,29 @@
 name: Refresh holiday data
 
+# Full re-collection, including the lunar dates, วันพืชมงคล and the มติ ครม. notes that only
+# MyHora carries.
+#
+# This has NO schedule on purpose. MyHora sits behind Cloudflare, which answers 403 to
+# GitHub's hosted runners while serving ordinary connections normally, so a scheduled run
+# on ubuntu-latest would fail every morning. Verified 2026-08-20: myhora.com returns 403
+# from a runner and 200 from a residential address; bot.or.th and Google return 200 from both.
+#
+# Two ways to use it:
+#   - Locally, where MyHora is reachable:  npm run refresh
+#   - Here, with `runner` set to a self-hosted label running on such a network.
+#
+# Day-to-day monitoring is handled by watch.yml, which uses only the reachable sources.
+
 on:
-  schedule:
-    # 08:00 ICT every day.
-    - cron: '0 1 * * *'
-    # 15:00 ICT on Tuesday and Wednesday. ครม. meets on Tuesdays, so this catches a new
-    # resolution the same afternoon rather than waiting for the next morning.
-    - cron: '0 8 * * 2,3'
   workflow_dispatch:
     inputs:
       years:
         description: 'Buddhist years to collect, e.g. 2569,2570'
         required: false
+      runner:
+        description: 'Runner label. ubuntu-latest will be blocked by Cloudflare; use a self-hosted runner.'
+        required: false
+        default: 'ubuntu-latest'
 
 permissions:
   contents: write
@@ -23,7 +35,7 @@ concurrency:
 
 jobs:
   refresh:
-    runs-on: ubuntu-latest
+    runs-on: ${{ inputs.runner || 'ubuntu-latest' }}
     steps:
       - uses: actions/checkout@v4
 
@@ -37,9 +49,14 @@ jobs:
       - name: Collect from sources
         id: collect
         run: |
-          npx tsx src/cli.ts refresh \
+          if ! npx tsx src/cli.ts refresh \
             ${{ inputs.years && format('--years={0}', inputs.years) || '' }} \
             --body-file=pr-body.md
+          then
+            echo "::error::Collection failed. If this ran on a hosted runner, MyHora was almost" \
+              "certainly blocked by Cloudflare — run 'npm run refresh' locally instead."
+            exit 1
+          fi
 
       - name: Validate what was collected
         if: steps.collect.outputs.changed == 'true'
@@ -58,15 +75,14 @@ jobs:
         uses: peter-evans/create-pull-request@v7
         with:
           branch: bot/holiday-refresh
-          # Reuse one branch so repeated runs update the open PR instead of stacking new ones.
           delete-branch: true
           title: 'Holiday data update (พ.ศ. ${{ steps.collect.outputs.years }})'
           body-path: pr-body.md
           commit-message: |
             Update Thai holiday data for พ.ศ. ${{ steps.collect.outputs.years }}
 
-            Collected automatically from MyHora, the Bank of Thailand and Google's
-            Thai holiday calendar. Review the diff against the มติ ครม. before merging.
+            Collected from MyHora, the Bank of Thailand and Google's Thai holiday
+            calendar. Review the diff against the มติ ครม. before merging.
           labels: |
             holiday-update
             ${{ steps.collect.outputs.cabinet_change == 'true' && 'cabinet-change' || '' }}

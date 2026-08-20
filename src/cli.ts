@@ -4,6 +4,10 @@ import { collectYear } from './collect.js';
 import { buildSite, DATA_DIR, dataPath, listYears, readYear, writeYear } from './build.js';
 import { diffYear, isEmpty, renderPullRequestBody, type YearDiff } from './diff.js';
 import { validateParsed } from './validate.js';
+import { compareYear, renderWatchReport, type WatchFinding } from './watch.js';
+import { fetchBotHtml } from './sources/bot-html.js';
+import { fetchGoogleIcs } from './sources/google-ics.js';
+import type { SourceResult } from './schema.js';
 
 function currentYearBe(): number {
   return beYear(new Date().getUTCFullYear());
@@ -92,6 +96,66 @@ async function refresh(args: string[]): Promise<number> {
   return 0;
 }
 
+/**
+ * Compare the sources reachable from CI against the committed data.
+ *
+ * Writes nothing and never rebuilds a year — it only reports what the Bank of Thailand and
+ * Google know that this repository does not, so a new มติ ครม. surfaces even where MyHora
+ * is blocked.
+ */
+async function watch(args: string[]): Promise<number> {
+  const thisYear = currentYearBe();
+  const years = parseYearList(option(args, 'years'), [thisYear, thisYear + 1]);
+  const findings: WatchFinding[] = [];
+
+  for (const yearBe of years) {
+    const committed = readYear(yearBe);
+    if (!committed) {
+      console.error(`No committed data for พ.ศ. ${yearBe}; skipping.`);
+      continue;
+    }
+
+    const reachable: SourceResult[] = [];
+    for (const [label, load] of [
+      ['bot-html', () => fetchBotHtml(yearBe)],
+      ['google-ics', () => fetchGoogleIcs(yearBe)],
+    ] as const) {
+      try {
+        reachable.push(await load());
+      } catch (error) {
+        console.error(`  ${label} unavailable: ${error instanceof Error ? error.message : String(error)}`);
+      }
+    }
+
+    if (reachable.length === 0) {
+      console.error(`No sources were reachable for ${yearBe}.`);
+      continue;
+    }
+
+    const yearFindings = compareYear(committed, reachable);
+    console.error(`พ.ศ. ${yearBe}: ${yearFindings.length} finding(s)`);
+    findings.push(...yearFindings);
+  }
+
+  const bodyFile = option(args, 'body-file');
+  if (findings.length > 0) {
+    const report = renderWatchReport(findings);
+    if (bodyFile) writeFileSync(bodyFile, `${report}\n`, 'utf8');
+    else console.log(report);
+  }
+
+  const summaryFile = process.env['GITHUB_OUTPUT'];
+  if (summaryFile) {
+    writeFileSync(
+      summaryFile,
+      `findings=${findings.length > 0}\ncabinet=${findings.some((f) => f.severity === 'cabinet')}\ncount=${findings.length}\n`,
+      { flag: 'a' },
+    );
+  }
+
+  return 0;
+}
+
 /** Collect one year live and print it without writing anything. */
 async function verify(args: string[]): Promise<number> {
   const yearBe = Number(args.find((a) => /^\d{4}$/.test(a)) ?? currentYearBe());
@@ -173,6 +237,8 @@ const USAGE = `Thai holiday collector
         Re-collect changeable years, write data/, and print a pull request body.
   verify [YEAR_BE]
         Collect one year live and print it. Writes nothing.
+  watch [--years=...] [--body-file=PATH]
+        Compare CI-reachable sources against committed data. Reports only; writes nothing.
   validate
         Check every file in data/ against the schema and the sanity rules.
   build
@@ -188,6 +254,8 @@ async function main(): Promise<number> {
       return refresh(args);
     case 'verify':
       return verify(args);
+    case 'watch':
+      return watch(args);
     case 'validate':
       return validate();
     case 'build':

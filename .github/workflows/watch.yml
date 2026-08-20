@@ -1,0 +1,69 @@
+name: Watch for cabinet changes
+
+# MyHora is unreachable from GitHub's runners — Cloudflare answers 403 to datacenter
+# addresses — so CI cannot rebuild a year. It can still watch: the Bank of Thailand and
+# Google are both reachable, and BOT announces the days ครม. grants. When it sees a day
+# this repository does not have, it opens an issue instead of guessing.
+#
+# Full re-collection runs where MyHora is reachable: `npm run refresh`.
+
+on:
+  schedule:
+    # 08:00 ICT daily.
+    - cron: '0 1 * * *'
+    # 15:00 ICT Tuesday and Wednesday — ครม. meets on Tuesdays.
+    - cron: '0 8 * * 2,3'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: watch
+  cancel-in-progress: false
+
+jobs:
+  watch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Compare reachable sources against committed data
+        id: watch
+        run: npx tsx src/cli.ts watch --body-file=watch-report.md
+
+      - name: Open or update the tracking issue
+        if: steps.watch.outputs.findings == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          CABINET: ${{ steps.watch.outputs.cabinet }}
+        run: |
+          set -euo pipefail
+          gh label create holiday-watch --color FBCA04 --description 'Upstream reports a holiday this repo lacks' --force
+          gh label create cabinet-change --color B60205 --description 'A วันหยุดพิเศษ (ครม.) may have been granted' --force
+
+          title="Upstream holiday data differs from this repository"
+          existing=$(gh issue list --label holiday-watch --state open --limit 1 --json number --jq '.[0].number // empty')
+
+          if [ -n "$existing" ]; then
+            # Comment rather than opening a second issue, so a long-running discrepancy
+            # does not turn into a pile of duplicates.
+            gh issue comment "$existing" --body-file watch-report.md
+            echo "Commented on existing issue #$existing"
+          else
+            labels="holiday-watch"
+            [ "$CABINET" = "true" ] && labels="$labels,cabinet-change"
+            gh issue create --title "$title" --body-file watch-report.md --label "$labels"
+          fi
+
+      - name: Report a quiet run
+        if: steps.watch.outputs.findings != 'true'
+        run: echo "Reachable sources agree with the committed data."

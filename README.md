@@ -19,9 +19,9 @@ Two real examples from 2569 alone:
 The second landed five months into the year it changed. Any library that ships a hardcoded
 holiday table is wrong the moment ครม. meets.
 
-So this repo re-collects the data every day, and every change arrives as a **pull request
-you review** rather than a silent commit. Git history becomes an audit trail of exactly
-when each holiday appeared.
+So this repo watches for cabinet changes every day, and every data change arrives as a
+**pull request you review** rather than a silent commit. Git history becomes an audit trail
+of exactly when each holiday appeared.
 
 ## Using it
 
@@ -29,16 +29,16 @@ Everything is a plain JSON file over a CDN. `Access-Control-Allow-Origin: *` is 
 browsers can fetch it directly.
 
 ```
-https://<user>.github.io/ThaiHoliday/v1/index.json
-https://<user>.github.io/ThaiHoliday/v1/holidays/2569.json
-https://<user>.github.io/ThaiHoliday/v1/holidays/2026.json   # same year, Gregorian name
+https://vorarakmua-svg.github.io/ThaiHoliday/v1/index.json
+https://vorarakmua-svg.github.io/ThaiHoliday/v1/holidays/2569.json
+https://vorarakmua-svg.github.io/ThaiHoliday/v1/holidays/2026.json   # same year, Gregorian name
 ```
 
 Each year is published under both its Buddhist and Gregorian year, because guessing wrong
 is an off-by-543 bug that looks like an empty result.
 
 ```js
-const res = await fetch('https://<user>.github.io/ThaiHoliday/v1/holidays/2026.json');
+const res = await fetch('https://vorarakmua-svg.github.io/ThaiHoliday/v1/holidays/2026.json');
 const { holidays } = await res.json();
 
 const daysOff = holidays.filter((h) => h.is_day_off).map((h) => h.date);
@@ -137,7 +137,7 @@ and reported.
 
 ```bash
 npm install
-npm test                          # 65 tests, all offline against vendored fixtures
+npm test                          # 72 tests, all offline against vendored fixtures
 npm run typecheck
 ```
 
@@ -155,6 +155,7 @@ changes.
 | Command | Purpose |
 | --- | --- |
 | `refresh [--dry-run] [--years=…]` | Re-collect changeable years and render a PR body |
+| `watch [--years=…]` | Compare CI-reachable sources against committed data. Reports only |
 | `verify [YEAR_BE]` | Collect one year live, print it, write nothing |
 | `validate` | Check every file in `data/` against the schema and sanity rules |
 | `build` | Copy `data/` into `public/v1` for GitHub Pages |
@@ -162,6 +163,35 @@ changes.
 
 Tests never touch the network — [`test/fixtures/`](test/fixtures) holds vendored copies of
 every source.
+
+### How updates actually reach the repo
+
+MyHora is unreachable from GitHub's hosted runners. Cloudflare serves an interstitial
+challenge to datacenter addresses, so both MyHora endpoints answer `403` there while
+returning `200` from an ordinary connection. Measured from a runner on 2026-08-20:
+
+| Source | Your machine | GitHub Actions |
+| --- | --- | --- |
+| MyHora page / iCal | 200 | **403** |
+| Bank of Thailand | 200 | 200 |
+| Google calendar | 200 | 200 |
+
+This project does not try to defeat that challenge. The work is split instead:
+
+- **[`watch.yml`](.github/workflows/watch.yml) runs daily in CI** using only BOT and Google.
+  BOT follows ครม. for one-off grants, so a fresh มติ ครม. still surfaces within a day. When
+  it sees a day this repo lacks, it opens an issue labelled `holiday-watch` — and
+  `cabinet-change` when BOT is the one reporting it. It never edits data.
+- **`npm run refresh` runs where MyHora is reachable** — your machine, or a self-hosted
+  runner. That is the only place the lunar dates, วันพืชมงคล and the มติ ครม. notes can be
+  re-read. Review the diff, then push it as a pull request.
+
+[`refresh.yml`](.github/workflows/refresh.yml) is therefore manual-only. Point its `runner`
+input at a self-hosted label and it works end-to-end unchanged.
+
+The watchdog deliberately ignores วันแรงงาน and its compensatory day: Google counts both as
+public holidays, they are working days for government offices, and reporting them every year
+would train you to ignore the alert.
 
 ### Overrides
 
