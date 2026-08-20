@@ -1,0 +1,416 @@
+{
+  "year": 2018,
+  "year_be": 2561,
+  "status": "confirmed",
+  "frozen": true,
+  "generated_at": "2026-08-20T12:56:10.649Z",
+  "source_urls": [
+    "https://myhora.com/calendar/holiday-2561.aspx",
+    "https://www.myhora.com/calendar/ical/holiday.aspx",
+    "computed from statute — see src/rules/fixed.ts",
+    "https://calendar.google.com/calendar/ical/th.th%23holiday%40group.v.calendar.google.com/public/basic.ics",
+    "https://www.bot.or.th/th/financial-institutions-holiday.html"
+  ],
+  "holidays": [
+    {
+      "date": "2018-01-01",
+      "date_be": "2561-01-01",
+      "day_of_week": "monday",
+      "key": "new_year_day",
+      "name_th": "วันขึ้นปีใหม่",
+      "name_en": "New Year's Day",
+      "type": "public",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html",
+        "rules"
+      ]
+    },
+    {
+      "date": "2018-01-02",
+      "date_be": "2561-01-02",
+      "day_of_week": "tuesday",
+      "key": "substitution_holiday",
+      "name_th": "วันหยุดชดเชย",
+      "name_en": "Substitution Holiday",
+      "type": "substitution",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": {
+        "date": "2017-12-31",
+        "name_th": "วันสิ้นปี"
+      },
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html"
+      ]
+    },
+    {
+      "date": "2018-03-01",
+      "date_be": "2561-03-01",
+      "day_of_week": "thursday",
+      "key": "makha_bucha",
+      "name_th": "วันมาฆบูชา",
+      "name_en": "Makha Bucha Day",
+      "type": "public",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html"
+      ]
+    },
+    {
+      "date": "2018-04-06",
+      "date_be": "2561-04-06",
+      "day_of_week": "friday",
+      "key": "chakri_day",
+      "name_th": "วันจักรี",
+      "name_en": "Chakri Memorial Day",
+      "type": "public",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html",
+        "rules"
+      ]
+    },
+    {
+      "date": "2018-04-12",
+      "date_be": "2561-04-12",
+      "day_of_week": "thursday",
+      "key": "special_cabinet_holiday",
+      "name_th": "วันสงกรานต์วันหยุดพิเศษ (ครม.)",
+      "name_en": "Special Cabinet Holiday",
+      "type": "special_cabinet",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html"
+      ]
+    },
+    {
+      "date": "2018-04-13",
+      "date_be": "2561-04-13",
+      "day_of_week": "friday",
+      "key": "songkran",
+      "name_th": "วันสงกรานต์",
+      "name_en": "Songkran Festival",
+      "type": "public",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html",
+        "rules"
+      ]
+    },
+    {
+      "date": "2018-04-14",
+      "date_be": "2561-04-14",
+      "day_of_week": "saturday",
+      "key": "songkran",
+      "name_th": "วันสงกรานต์",
+      "name_en": "Songkran Festival",
+      "type": "public",
+      "status": "confirmed",
+      "is_day_off": false,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html",
+        "rules"
+      ]
+    },
+    {
+      "date": "2018-04-15",
+      "date_be": "2561-04-15",
+      "day_of_week": "sunday",
+      "key": "songkran",
+      "name_th": "วันสงกรานต์",
+      "name_en": "Songkran Festival",
+      "type": "public",
+      "status": "confirmed",
+      "is_day_off": false,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html",
+        "rules"
+      ]
+    },
+    {
+      "date": "2018-04-16",
+      "date_be": "2561-04-16",
+      "day_of_week": "monday",
+      "key": "substitution_holiday",
+      "name_th": "วันหยุดชดเชย",
+      "name_en": "Substitution Holiday",
+      "type": "substitution",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": {
+        "date": "2018-04-15",
+        "name_th": "วันสงกรานต์"
+      },
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html"
+      ]
+    },
+    {
+      "date": "2018-05-01",
+      "date_be": "2561-05-01",
+      "day_of_week": "tuesday",
+      "key": "labour_day",
+      "name_th": "วันแรงงาน",
+      "name_en": "National Labour Day",
+      "type": "public",
+      "status": "confirmed",
+      "is_day_off": false,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html"
+      ]
+    },
+    {
+      "date": "2018-05-14",
+      "date_be": "2561-05-14",
+      "day_of_week": "monday",
+      "key": "royal_ploughing_day",
+      "name_th": "วันพืชมงคล",
+      "name_en": "Royal Ploughing Ceremony Day",
+      "type": "royal",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html"
+      ]
+    },
+    {
+      "date": "2018-05-29",
+      "date_be": "2561-05-29",
+      "day_of_week": "tuesday",
+      "key": "visakha_bucha",
+      "name_th": "วันวิสาขบูชา",
+      "name_en": "Visakha Bucha Day",
+      "type": "public",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html"
+      ]
+    },
+    {
+      "date": "2018-07-27",
+      "date_be": "2561-07-27",
+      "day_of_week": "friday",
+      "key": "asarnha_bucha",
+      "name_th": "วันอาสาฬหบูชา",
+      "name_en": "Asarnha Bucha Day",
+      "type": "public",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html"
+      ]
+    },
+    {
+      "date": "2018-07-28",
+      "date_be": "2561-07-28",
+      "day_of_week": "saturday",
+      "key": "king_vajiralongkorn_birthday",
+      "name_th": "วันเฉลิมฯ พระวชิรเกล้าเจ้าอยู่หัว",
+      "name_en": "HM King Vajiralongkorn's Birthday",
+      "type": "public",
+      "status": "confirmed",
+      "is_day_off": false,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html",
+        "rules"
+      ]
+    },
+    {
+      "date": "2018-07-30",
+      "date_be": "2561-07-30",
+      "day_of_week": "monday",
+      "key": "substitution_holiday",
+      "name_th": "วันหยุดชดเชย",
+      "name_en": "Substitution Holiday",
+      "type": "substitution",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": {
+        "date": "2018-07-28",
+        "name_th": "วันเฉลิมฯ พระวชิรเกล้าเจ้าอยู่หัว"
+      },
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html"
+      ]
+    },
+    {
+      "date": "2018-08-12",
+      "date_be": "2561-08-12",
+      "day_of_week": "sunday",
+      "key": "queen_mother_birthday",
+      "name_th": "วันแม่",
+      "name_en": "HM Queen Sirikit The Queen Mother's Birthday",
+      "type": "public",
+      "status": "confirmed",
+      "is_day_off": false,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html",
+        "rules"
+      ]
+    },
+    {
+      "date": "2018-08-13",
+      "date_be": "2561-08-13",
+      "day_of_week": "monday",
+      "key": "substitution_holiday",
+      "name_th": "วันหยุดชดเชย",
+      "name_en": "Substitution Holiday",
+      "type": "substitution",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": {
+        "date": "2018-08-12",
+        "name_th": "วันแม่"
+      },
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html"
+      ]
+    },
+    {
+      "date": "2018-10-13",
+      "date_be": "2561-10-13",
+      "day_of_week": "saturday",
+      "key": "king_bhumibol_memorial_day",
+      "name_th": "วันนวมินทรมหาราช",
+      "name_en": "HM King Bhumibol Adulyadej Memorial Day",
+      "type": "public",
+      "status": "confirmed",
+      "is_day_off": false,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html",
+        "rules"
+      ]
+    },
+    {
+      "date": "2018-10-15",
+      "date_be": "2561-10-15",
+      "day_of_week": "monday",
+      "key": "substitution_holiday",
+      "name_th": "วันหยุดชดเชย",
+      "name_en": "Substitution Holiday",
+      "type": "substitution",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": {
+        "date": "2018-10-13",
+        "name_th": "วันนวมินทรมหาราช"
+      },
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html"
+      ]
+    },
+    {
+      "date": "2018-10-23",
+      "date_be": "2561-10-23",
+      "day_of_week": "tuesday",
+      "key": "chulalongkorn_day",
+      "name_th": "วันปิยมหาราช",
+      "name_en": "Chulalongkorn Day",
+      "type": "public",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html",
+        "rules"
+      ]
+    },
+    {
+      "date": "2018-12-05",
+      "date_be": "2561-12-05",
+      "day_of_week": "wednesday",
+      "key": "king_bhumibol_birthday",
+      "name_th": "วันพ่อ",
+      "name_en": "HM King Bhumibol Adulyadej's Birthday (National Father's Day)",
+      "type": "public",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html",
+        "rules"
+      ]
+    },
+    {
+      "date": "2018-12-10",
+      "date_be": "2561-12-10",
+      "day_of_week": "monday",
+      "key": "constitution_day",
+      "name_th": "วันรัฐธรรมนูญ",
+      "name_en": "Constitution Day",
+      "type": "public",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html",
+        "rules"
+      ]
+    },
+    {
+      "date": "2018-12-31",
+      "date_be": "2561-12-31",
+      "day_of_week": "monday",
+      "key": "new_year_eve",
+      "name_th": "วันสิ้นปี",
+      "name_en": "New Year's Eve",
+      "type": "public",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html",
+        "rules"
+      ]
+    }
+  ],
+  "warnings": [
+    "MyHora's iCalendar feed covers a different year than 2561; it only ever serves the current year.",
+    "Google's calendar returned no holidays for 2561. Its feed covers roughly 2021-2030.",
+    "2018-04-12 (วันสงกรานต์วันหยุดพิเศษ (ครม.)) is a cabinet holiday with no มติ ครม. cited. The day itself is attested; only the citation is missing."
+  ]
+}

@@ -1,0 +1,62 @@
+name: Validate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # The frozen-year guard compares against the base branch.
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Test
+        run: npm test
+
+      - name: Validate holiday data
+        run: npm run validate
+
+      - name: Refuse changes to frozen years
+        if: github.event_name == 'pull_request'
+        env:
+          BASE: ${{ github.base_ref }}
+        run: |
+          set -euo pipefail
+          git fetch --no-tags --depth=1 origin "$BASE"
+          mapfile -t changed < <(git diff --name-only "origin/$BASE...HEAD" -- 'data/*.json')
+
+          failed=0
+          for file in "${changed[@]:-}"; do
+            [ -n "$file" ] || continue
+            # A year is protected if it was frozen on the base branch. Freezing a year in
+            # this very PR is allowed; un-freezing or editing an already-frozen one is not.
+            if git show "origin/$BASE:$file" 2>/dev/null \
+              | node -e 'let s="";process.stdin.on("data",d=>s+=d).on("end",()=>process.exit(JSON.parse(s).frozen===true?0:1))'
+            then
+              echo "::error file=$file::$file is a frozen year and must not change."
+              failed=1
+            fi
+          done
+
+          if [ "$failed" -ne 0 ]; then
+            echo "Frozen years record settled history. Reopen one deliberately if ครม. really did revise it."
+            exit 1
+          fi
+          echo "No frozen years were modified."

@@ -1,0 +1,77 @@
+name: Refresh holiday data
+
+on:
+  schedule:
+    # 08:00 ICT every day.
+    - cron: '0 1 * * *'
+    # 15:00 ICT on Tuesday and Wednesday. ครม. meets on Tuesdays, so this catches a new
+    # resolution the same afternoon rather than waiting for the next morning.
+    - cron: '0 8 * * 2,3'
+  workflow_dispatch:
+    inputs:
+      years:
+        description: 'Buddhist years to collect, e.g. 2569,2570'
+        required: false
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Collect from sources
+        id: collect
+        run: |
+          npx tsx src/cli.ts refresh \
+            ${{ inputs.years && format('--years={0}', inputs.years) || '' }} \
+            --body-file=pr-body.md
+
+      - name: Validate what was collected
+        if: steps.collect.outputs.changed == 'true'
+        run: npm run validate
+
+      - name: Ensure labels exist
+        if: steps.collect.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh label create holiday-update --color 0E8A16 --description 'Automated holiday data refresh' --force
+          gh label create cabinet-change --color B60205 --description 'A วันหยุดพิเศษ (ครม.) was added or removed' --force
+
+      - name: Open or update the pull request
+        if: steps.collect.outputs.changed == 'true'
+        uses: peter-evans/create-pull-request@v7
+        with:
+          branch: bot/holiday-refresh
+          # Reuse one branch so repeated runs update the open PR instead of stacking new ones.
+          delete-branch: true
+          title: 'Holiday data update (พ.ศ. ${{ steps.collect.outputs.years }})'
+          body-path: pr-body.md
+          commit-message: |
+            Update Thai holiday data for พ.ศ. ${{ steps.collect.outputs.years }}
+
+            Collected automatically from MyHora, the Bank of Thailand and Google's
+            Thai holiday calendar. Review the diff against the มติ ครม. before merging.
+          labels: |
+            holiday-update
+            ${{ steps.collect.outputs.cabinet_change == 'true' && 'cabinet-change' || '' }}
+          add-paths: data/**
+
+      - name: Report when nothing changed
+        if: steps.collect.outputs.changed != 'true'
+        run: echo "Sources agree with the committed data. No pull request needed."

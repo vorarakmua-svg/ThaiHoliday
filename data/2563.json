@@ -1,0 +1,482 @@
+{
+  "year": 2020,
+  "year_be": 2563,
+  "status": "confirmed",
+  "frozen": true,
+  "generated_at": "2026-08-20T12:56:22.701Z",
+  "source_urls": [
+    "https://myhora.com/calendar/holiday-2563.aspx",
+    "https://www.myhora.com/calendar/ical/holiday.aspx",
+    "computed from statute — see src/rules/fixed.ts",
+    "https://calendar.google.com/calendar/ical/th.th%23holiday%40group.v.calendar.google.com/public/basic.ics",
+    "https://www.bot.or.th/th/financial-institutions-holiday.html"
+  ],
+  "holidays": [
+    {
+      "date": "2020-01-01",
+      "date_be": "2563-01-01",
+      "day_of_week": "wednesday",
+      "key": "new_year_day",
+      "name_th": "วันขึ้นปีใหม่",
+      "name_en": "New Year's Day",
+      "type": "public",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html",
+        "rules"
+      ]
+    },
+    {
+      "date": "2020-02-08",
+      "date_be": "2563-02-08",
+      "day_of_week": "saturday",
+      "key": "makha_bucha",
+      "name_th": "วันมาฆบูชา",
+      "name_en": "Makha Bucha Day",
+      "type": "public",
+      "status": "confirmed",
+      "is_day_off": false,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html"
+      ]
+    },
+    {
+      "date": "2020-02-10",
+      "date_be": "2563-02-10",
+      "day_of_week": "monday",
+      "key": "substitution_holiday",
+      "name_th": "วันหยุดชดเชย",
+      "name_en": "Substitution Holiday",
+      "type": "substitution",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": {
+        "date": "2020-02-08",
+        "name_th": "วันมาฆบูชา"
+      },
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html"
+      ]
+    },
+    {
+      "date": "2020-04-06",
+      "date_be": "2563-04-06",
+      "day_of_week": "monday",
+      "key": "chakri_day",
+      "name_th": "วันจักรี",
+      "name_en": "Chakri Memorial Day",
+      "type": "public",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html",
+        "rules"
+      ]
+    },
+    {
+      "date": "2020-05-01",
+      "date_be": "2563-05-01",
+      "day_of_week": "friday",
+      "key": "labour_day",
+      "name_th": "วันแรงงาน",
+      "name_en": "National Labour Day",
+      "type": "public",
+      "status": "confirmed",
+      "is_day_off": false,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html"
+      ]
+    },
+    {
+      "date": "2020-05-04",
+      "date_be": "2563-05-04",
+      "day_of_week": "monday",
+      "key": "coronation_day",
+      "name_th": "วันฉัตรมงคล",
+      "name_en": "Coronation Day",
+      "type": "public",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html",
+        "rules"
+      ]
+    },
+    {
+      "date": "2020-05-06",
+      "date_be": "2563-05-06",
+      "day_of_week": "wednesday",
+      "key": "visakha_bucha",
+      "name_th": "วันวิสาขบูชา",
+      "name_en": "Visakha Bucha Day",
+      "type": "public",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html"
+      ]
+    },
+    {
+      "date": "2020-05-11",
+      "date_be": "2563-05-11",
+      "day_of_week": "monday",
+      "key": "royal_ploughing_day",
+      "name_th": "วันพืชมงคล",
+      "name_en": "Royal Ploughing Ceremony Day",
+      "type": "royal",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html"
+      ]
+    },
+    {
+      "date": "2020-06-03",
+      "date_be": "2563-06-03",
+      "day_of_week": "wednesday",
+      "key": "queen_suthida_birthday",
+      "name_th": "วันเฉลิมฯ พระบรมราชินี",
+      "name_en": "HM Queen Suthida's Birthday",
+      "type": "public",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html",
+        "rules"
+      ]
+    },
+    {
+      "date": "2020-07-05",
+      "date_be": "2563-07-05",
+      "day_of_week": "sunday",
+      "key": "asarnha_bucha",
+      "name_th": "วันอาสาฬหบูชา",
+      "name_en": "Asarnha Bucha Day",
+      "type": "public",
+      "status": "confirmed",
+      "is_day_off": false,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html"
+      ]
+    },
+    {
+      "date": "2020-07-06",
+      "date_be": "2563-07-06",
+      "day_of_week": "monday",
+      "key": "khao_phansa",
+      "name_th": "วันเข้าพรรษา",
+      "name_en": "Buddhist Lent Day",
+      "type": "public",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html"
+      ]
+    },
+    {
+      "date": "2020-07-07",
+      "date_be": "2563-07-07",
+      "day_of_week": "tuesday",
+      "key": "substitution_holiday",
+      "name_th": "วันหยุดชดเชย",
+      "name_en": "Substitution Holiday",
+      "type": "substitution",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": {
+        "date": "2020-07-05",
+        "name_th": "วันอาสาฬหบูชา"
+      },
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html"
+      ]
+    },
+    {
+      "date": "2020-07-27",
+      "date_be": "2563-07-27",
+      "day_of_week": "monday",
+      "key": "substitution_holiday",
+      "name_th": "วันหยุดชดเชย",
+      "name_en": "Substitution Holiday",
+      "type": "substitution",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": null,
+      "cabinet_resolution": {
+        "date": "2020-07-01",
+        "text": "มติ ครม. 1 ก.ค. 2563 ประกาศ 27 ก.ค. 2563 เป็นวันหยุดราชการชดเชยวันสงกรานต์"
+      },
+      "confirmed_by": [
+        "myhora-html"
+      ]
+    },
+    {
+      "date": "2020-07-28",
+      "date_be": "2563-07-28",
+      "day_of_week": "tuesday",
+      "key": "king_vajiralongkorn_birthday",
+      "name_th": "วันเฉลิมฯ พระวชิรเกล้าเจ้าอยู่หัว",
+      "name_en": "HM King Vajiralongkorn's Birthday",
+      "type": "public",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html",
+        "rules"
+      ]
+    },
+    {
+      "date": "2020-08-12",
+      "date_be": "2563-08-12",
+      "day_of_week": "wednesday",
+      "key": "queen_mother_birthday",
+      "name_th": "วันแม่",
+      "name_en": "HM Queen Sirikit The Queen Mother's Birthday",
+      "type": "public",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html",
+        "rules"
+      ]
+    },
+    {
+      "date": "2020-09-04",
+      "date_be": "2563-09-04",
+      "day_of_week": "friday",
+      "key": "substitution_holiday",
+      "name_th": "วันหยุดชดเชย",
+      "name_en": "Substitution Holiday",
+      "type": "substitution",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": null,
+      "cabinet_resolution": {
+        "date": "2020-08-13",
+        "text": "มติ ครม. 13 ส.ค. 2563 ประกาศ 4 , 7 ก.ย. 2563 เป็นวันหยุดราชการชดเชยวันสงกรานต์"
+      },
+      "confirmed_by": [
+        "myhora-html"
+      ]
+    },
+    {
+      "date": "2020-09-07",
+      "date_be": "2563-09-07",
+      "day_of_week": "monday",
+      "key": "substitution_holiday",
+      "name_th": "วันหยุดชดเชย",
+      "name_en": "Substitution Holiday",
+      "type": "substitution",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": null,
+      "cabinet_resolution": {
+        "date": "2020-08-13",
+        "text": "มติ ครม. 13 ส.ค. 2563 ประกาศ 4 , 7 ก.ย. 2563 เป็นวันหยุดราชการชดเชยวันสงกรานต์"
+      },
+      "confirmed_by": [
+        "myhora-html"
+      ]
+    },
+    {
+      "date": "2020-10-13",
+      "date_be": "2563-10-13",
+      "day_of_week": "tuesday",
+      "key": "king_bhumibol_memorial_day",
+      "name_th": "วันนวมินทรมหาราช",
+      "name_en": "HM King Bhumibol Adulyadej Memorial Day",
+      "type": "public",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html",
+        "rules"
+      ]
+    },
+    {
+      "date": "2020-10-23",
+      "date_be": "2563-10-23",
+      "day_of_week": "friday",
+      "key": "chulalongkorn_day",
+      "name_th": "วันปิยมหาราช",
+      "name_en": "Chulalongkorn Day",
+      "type": "public",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html",
+        "rules"
+      ]
+    },
+    {
+      "date": "2020-11-19",
+      "date_be": "2563-11-19",
+      "day_of_week": "thursday",
+      "key": "special_cabinet_holiday",
+      "name_th": "วันหยุดพิเศษ (ครม.)",
+      "name_en": "Special Cabinet Holiday",
+      "type": "special_cabinet",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": null,
+      "cabinet_resolution": {
+        "date": "2020-09-23",
+        "text": "มติ ครม. 23 ก.ย. 2563 ประกาศวันหยุดราชการเพิ่มเติมเป็นกรณีพิเศษ 19 , 20 พ.ย. 2563 และ 11 ธ.ค. 2563 (แทนชดเชยวันพ่อ 7 ธ.ค. 2563) , ธปท. เลื่อนวันหยุดเทศกาลสงกรานต์ 13-15 เม.ย. 2563 ชดเชย 27 ก.ค. 2563 และ 4 , 7 ก.ย. 2563"
+      },
+      "confirmed_by": [
+        "myhora-html"
+      ]
+    },
+    {
+      "date": "2020-11-20",
+      "date_be": "2563-11-20",
+      "day_of_week": "friday",
+      "key": "special_cabinet_holiday",
+      "name_th": "วันหยุดพิเศษ (ครม.)",
+      "name_en": "Special Cabinet Holiday",
+      "type": "special_cabinet",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": null,
+      "cabinet_resolution": {
+        "date": "2020-09-23",
+        "text": "มติ ครม. 23 ก.ย. 2563 ประกาศวันหยุดราชการเพิ่มเติมเป็นกรณีพิเศษ 19 , 20 พ.ย. 2563 และ 11 ธ.ค. 2563 (แทนชดเชยวันพ่อ 7 ธ.ค. 2563) , ธปท. เลื่อนวันหยุดเทศกาลสงกรานต์ 13-15 เม.ย. 2563 ชดเชย 27 ก.ค. 2563 และ 4 , 7 ก.ย. 2563"
+      },
+      "confirmed_by": [
+        "myhora-html"
+      ]
+    },
+    {
+      "date": "2020-12-05",
+      "date_be": "2563-12-05",
+      "day_of_week": "saturday",
+      "key": "king_bhumibol_birthday",
+      "name_th": "วันพ่อ",
+      "name_en": "HM King Bhumibol Adulyadej's Birthday (National Father's Day)",
+      "type": "public",
+      "status": "confirmed",
+      "is_day_off": false,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html",
+        "rules"
+      ]
+    },
+    {
+      "date": "2020-12-07",
+      "date_be": "2563-12-07",
+      "day_of_week": "monday",
+      "key": "substitution_holiday",
+      "name_th": "วันหยุดชดเชย",
+      "name_en": "Substitution Holiday",
+      "type": "substitution",
+      "status": "confirmed",
+      "is_day_off": false,
+      "substitutes_for": {
+        "date": "2020-12-05",
+        "name_th": "วันพ่อ"
+      },
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html"
+      ]
+    },
+    {
+      "date": "2020-12-10",
+      "date_be": "2563-12-10",
+      "day_of_week": "thursday",
+      "key": "constitution_day",
+      "name_th": "วันรัฐธรรมนูญ",
+      "name_en": "Constitution Day",
+      "type": "public",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html",
+        "rules"
+      ]
+    },
+    {
+      "date": "2020-12-11",
+      "date_be": "2563-12-11",
+      "day_of_week": "friday",
+      "key": "substitution_holiday",
+      "name_th": "วันหยุดชดเชย (ครม.)",
+      "name_en": "Substitution Holiday",
+      "type": "substitution",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": null,
+      "cabinet_resolution": {
+        "date": "2020-09-23",
+        "text": "มติ ครม. 23 ก.ย. 2563 ประกาศวันหยุดราชการเพิ่มเติมเป็นกรณีพิเศษ 19 , 20 พ.ย. 2563 และ 11 ธ.ค. 2563 (แทนชดเชยวันพ่อ 7 ธ.ค. 2563) , ธปท. เลื่อนวันหยุดเทศกาลสงกรานต์ 13-15 เม.ย. 2563 ชดเชย 27 ก.ค. 2563 และ 4 , 7 ก.ย. 2563"
+      },
+      "confirmed_by": [
+        "myhora-html"
+      ]
+    },
+    {
+      "date": "2020-12-31",
+      "date_be": "2563-12-31",
+      "day_of_week": "thursday",
+      "key": "new_year_eve",
+      "name_th": "วันสิ้นปี",
+      "name_en": "New Year's Eve",
+      "type": "public",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html",
+        "rules"
+      ]
+    }
+  ],
+  "warnings": [
+    "Substitution on 2020-07-27 has no preceding observance to compensate.",
+    "Substitution on 2020-09-04 has no preceding observance to compensate.",
+    "Substitution on 2020-09-07 has no preceding observance to compensate.",
+    "Substitution on 2020-12-11 has no preceding observance to compensate.",
+    "Could not extract any holiday change from cabinet note: \"มติ ครม. 18 มี.ค. 2563 ประกาศเลื่อนวันหยุดราชการช่วงเทศกาลสงกรานต์ ระหว่าง 13-15 เม.ย. 2563 ออกไปก่อน เพื่อเฝ้าระวังและป้องกันการระบาดของโรคโควิด-19 และจะชดเชยให้ภายหลัง ,\"",
+    "MyHora's iCalendar feed covers a different year than 2563; it only ever serves the current year.",
+    "2020-04-13 (วันสงกรานต์) is a fixed statutory holiday, but no source lists it. Either ครม. cancelled or moved it, or the scrape is incomplete. It has been left out — add it through data/overrides if it should be there.",
+    "2020-04-14 (วันสงกรานต์) is a fixed statutory holiday, but no source lists it. Either ครม. cancelled or moved it, or the scrape is incomplete. It has been left out — add it through data/overrides if it should be there.",
+    "2020-04-15 (วันสงกรานต์) is a fixed statutory holiday, but no source lists it. Either ครม. cancelled or moved it, or the scrape is incomplete. It has been left out — add it through data/overrides if it should be there.",
+    "Google's calendar returned no holidays for 2563. Its feed covers roughly 2021-2030."
+  ]
+}

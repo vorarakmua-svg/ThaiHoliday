@@ -1,0 +1,431 @@
+{
+  "year": 2027,
+  "year_be": 2570,
+  "status": "provisional",
+  "frozen": false,
+  "generated_at": "2026-08-20T12:57:04.937Z",
+  "source_urls": [
+    "https://myhora.com/calendar/holiday-2570.aspx",
+    "https://www.myhora.com/calendar/ical/holiday.aspx",
+    "computed from statute — see src/rules/fixed.ts",
+    "https://calendar.google.com/calendar/ical/th.th%23holiday%40group.v.calendar.google.com/public/basic.ics",
+    "https://www.bot.or.th/th/financial-institutions-holiday.html"
+  ],
+  "holidays": [
+    {
+      "date": "2027-01-01",
+      "date_be": "2570-01-01",
+      "day_of_week": "friday",
+      "key": "new_year_day",
+      "name_th": "วันขึ้นปีใหม่",
+      "name_en": "New Year's Day",
+      "type": "public",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html",
+        "rules",
+        "google-ics"
+      ]
+    },
+    {
+      "date": "2027-02-21",
+      "date_be": "2570-02-21",
+      "day_of_week": "sunday",
+      "key": "makha_bucha",
+      "name_th": "วันมาฆบูชา",
+      "name_en": "Makha Bucha Day",
+      "type": "public",
+      "status": "provisional",
+      "is_day_off": false,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html"
+      ]
+    },
+    {
+      "date": "2027-02-22",
+      "date_be": "2570-02-22",
+      "day_of_week": "monday",
+      "key": "substitution_holiday",
+      "name_th": "วันหยุดชดเชย",
+      "name_en": "Substitution Holiday",
+      "type": "substitution",
+      "status": "provisional",
+      "is_day_off": true,
+      "substitutes_for": {
+        "date": "2027-02-21",
+        "name_th": "วันมาฆบูชา"
+      },
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html"
+      ]
+    },
+    {
+      "date": "2027-04-06",
+      "date_be": "2570-04-06",
+      "day_of_week": "tuesday",
+      "key": "chakri_day",
+      "name_th": "วันจักรี",
+      "name_en": "Chakri Memorial Day",
+      "type": "public",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html",
+        "rules",
+        "google-ics"
+      ]
+    },
+    {
+      "date": "2027-04-13",
+      "date_be": "2570-04-13",
+      "day_of_week": "tuesday",
+      "key": "songkran",
+      "name_th": "วันสงกรานต์",
+      "name_en": "Songkran Festival",
+      "type": "public",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html",
+        "rules",
+        "google-ics"
+      ]
+    },
+    {
+      "date": "2027-04-14",
+      "date_be": "2570-04-14",
+      "day_of_week": "wednesday",
+      "key": "songkran",
+      "name_th": "วันสงกรานต์",
+      "name_en": "Songkran Festival",
+      "type": "public",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html",
+        "rules",
+        "google-ics"
+      ]
+    },
+    {
+      "date": "2027-04-15",
+      "date_be": "2570-04-15",
+      "day_of_week": "thursday",
+      "key": "songkran",
+      "name_th": "วันสงกรานต์",
+      "name_en": "Songkran Festival",
+      "type": "public",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html",
+        "rules",
+        "google-ics"
+      ]
+    },
+    {
+      "date": "2027-05-01",
+      "date_be": "2570-05-01",
+      "day_of_week": "saturday",
+      "key": "labour_day",
+      "name_th": "วันแรงงาน",
+      "name_en": "National Labour Day",
+      "type": "public",
+      "status": "provisional",
+      "is_day_off": false,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html",
+        "google-ics"
+      ]
+    },
+    {
+      "date": "2027-05-04",
+      "date_be": "2570-05-04",
+      "day_of_week": "tuesday",
+      "key": "coronation_day",
+      "name_th": "วันฉัตรมงคล",
+      "name_en": "Coronation Day",
+      "type": "public",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html",
+        "rules",
+        "google-ics"
+      ]
+    },
+    {
+      "date": "2027-05-20",
+      "date_be": "2570-05-20",
+      "day_of_week": "thursday",
+      "key": "visakha_bucha",
+      "name_th": "วันวิสาขบูชา",
+      "name_en": "Visakha Bucha Day",
+      "type": "public",
+      "status": "provisional",
+      "is_day_off": true,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html"
+      ]
+    },
+    {
+      "date": "2027-06-03",
+      "date_be": "2570-06-03",
+      "day_of_week": "thursday",
+      "key": "queen_suthida_birthday",
+      "name_th": "วันเฉลิมฯ พระบรมราชินี",
+      "name_en": "HM Queen Suthida's Birthday",
+      "type": "public",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html",
+        "rules",
+        "google-ics"
+      ]
+    },
+    {
+      "date": "2027-07-18",
+      "date_be": "2570-07-18",
+      "day_of_week": "sunday",
+      "key": "asarnha_bucha",
+      "name_th": "วันอาสาฬหบูชา",
+      "name_en": "Asarnha Bucha Day",
+      "type": "public",
+      "status": "provisional",
+      "is_day_off": false,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html"
+      ]
+    },
+    {
+      "date": "2027-07-19",
+      "date_be": "2570-07-19",
+      "day_of_week": "monday",
+      "key": "khao_phansa",
+      "name_th": "วันเข้าพรรษา",
+      "name_en": "Buddhist Lent Day",
+      "type": "public",
+      "status": "provisional",
+      "is_day_off": true,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html"
+      ]
+    },
+    {
+      "date": "2027-07-20",
+      "date_be": "2570-07-20",
+      "day_of_week": "tuesday",
+      "key": "substitution_holiday",
+      "name_th": "วันหยุดชดเชย",
+      "name_en": "Substitution Holiday",
+      "type": "substitution",
+      "status": "provisional",
+      "is_day_off": true,
+      "substitutes_for": {
+        "date": "2027-07-18",
+        "name_th": "วันอาสาฬหบูชา"
+      },
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html"
+      ]
+    },
+    {
+      "date": "2027-07-28",
+      "date_be": "2570-07-28",
+      "day_of_week": "wednesday",
+      "key": "king_vajiralongkorn_birthday",
+      "name_th": "วันเฉลิมฯ พระวชิรเกล้าเจ้าอยู่หัว",
+      "name_en": "HM King Vajiralongkorn's Birthday",
+      "type": "public",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html",
+        "rules",
+        "google-ics"
+      ]
+    },
+    {
+      "date": "2027-08-12",
+      "date_be": "2570-08-12",
+      "day_of_week": "thursday",
+      "key": "queen_mother_birthday",
+      "name_th": "วันแม่",
+      "name_en": "HM Queen Sirikit The Queen Mother's Birthday",
+      "type": "public",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html",
+        "rules",
+        "google-ics"
+      ]
+    },
+    {
+      "date": "2027-10-13",
+      "date_be": "2570-10-13",
+      "day_of_week": "wednesday",
+      "key": "king_bhumibol_memorial_day",
+      "name_th": "วันนวมินทรมหาราช",
+      "name_en": "HM King Bhumibol Adulyadej Memorial Day",
+      "type": "public",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html",
+        "rules",
+        "google-ics"
+      ]
+    },
+    {
+      "date": "2027-10-23",
+      "date_be": "2570-10-23",
+      "day_of_week": "saturday",
+      "key": "chulalongkorn_day",
+      "name_th": "วันปิยมหาราช",
+      "name_en": "Chulalongkorn Day",
+      "type": "public",
+      "status": "confirmed",
+      "is_day_off": false,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html",
+        "rules",
+        "google-ics"
+      ]
+    },
+    {
+      "date": "2027-10-25",
+      "date_be": "2570-10-25",
+      "day_of_week": "monday",
+      "key": "substitution_holiday",
+      "name_th": "วันหยุดชดเชย",
+      "name_en": "Substitution Holiday",
+      "type": "substitution",
+      "status": "provisional",
+      "is_day_off": true,
+      "substitutes_for": {
+        "date": "2027-10-23",
+        "name_th": "วันปิยมหาราช"
+      },
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html",
+        "google-ics"
+      ]
+    },
+    {
+      "date": "2027-12-05",
+      "date_be": "2570-12-05",
+      "day_of_week": "sunday",
+      "key": "king_bhumibol_birthday",
+      "name_th": "วันพ่อ",
+      "name_en": "HM King Bhumibol Adulyadej's Birthday (National Father's Day)",
+      "type": "public",
+      "status": "confirmed",
+      "is_day_off": false,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html",
+        "rules",
+        "google-ics"
+      ]
+    },
+    {
+      "date": "2027-12-06",
+      "date_be": "2570-12-06",
+      "day_of_week": "monday",
+      "key": "substitution_holiday",
+      "name_th": "วันหยุดชดเชย",
+      "name_en": "Substitution Holiday",
+      "type": "substitution",
+      "status": "provisional",
+      "is_day_off": true,
+      "substitutes_for": {
+        "date": "2027-12-05",
+        "name_th": "วันพ่อ"
+      },
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html",
+        "google-ics"
+      ]
+    },
+    {
+      "date": "2027-12-10",
+      "date_be": "2570-12-10",
+      "day_of_week": "friday",
+      "key": "constitution_day",
+      "name_th": "วันรัฐธรรมนูญ",
+      "name_en": "Constitution Day",
+      "type": "public",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html",
+        "rules",
+        "google-ics"
+      ]
+    },
+    {
+      "date": "2027-12-31",
+      "date_be": "2570-12-31",
+      "day_of_week": "friday",
+      "key": "new_year_eve",
+      "name_th": "วันสิ้นปี",
+      "name_en": "New Year's Eve",
+      "type": "public",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html",
+        "rules",
+        "google-ics"
+      ]
+    }
+  ],
+  "warnings": [
+    "MyHora's iCalendar feed covers a different year than 2570; it only ever serves the current year.",
+    "google-ics lists a holiday on 2027-05-03 (\"วันหยุดชดเชยวันแรงงานแห่งชาติ\") that no authoritative source reports. Check whether it is a real day off before merging."
+  ]
+}

@@ -1,0 +1,519 @@
+{
+  "year": 2021,
+  "year_be": 2564,
+  "status": "confirmed",
+  "frozen": true,
+  "generated_at": "2026-08-20T12:56:28.738Z",
+  "source_urls": [
+    "https://myhora.com/calendar/holiday-2564.aspx",
+    "https://www.myhora.com/calendar/ical/holiday.aspx",
+    "computed from statute — see src/rules/fixed.ts",
+    "https://calendar.google.com/calendar/ical/th.th%23holiday%40group.v.calendar.google.com/public/basic.ics",
+    "https://www.bot.or.th/th/financial-institutions-holiday.html"
+  ],
+  "holidays": [
+    {
+      "date": "2021-01-01",
+      "date_be": "2564-01-01",
+      "day_of_week": "friday",
+      "key": "new_year_day",
+      "name_th": "วันขึ้นปีใหม่",
+      "name_en": "New Year's Day",
+      "type": "public",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html",
+        "rules",
+        "google-ics"
+      ]
+    },
+    {
+      "date": "2021-02-12",
+      "date_be": "2564-02-12",
+      "day_of_week": "friday",
+      "key": "chinese_new_year",
+      "name_th": "วันตรุษจีน",
+      "name_en": "Chinese New Year",
+      "type": "special_cabinet",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": null,
+      "cabinet_resolution": {
+        "date": "2020-12-29",
+        "text": "มติ ครม. 29 ธ.ค. 2563 ประกาศวันหยุดราชการปี 2564 เพิ่มเป็นกรณีพิเศษ 4 วัน คือ [1.] 12 ก.พ. 2564 (วันตรุษจีน) , [2.] 12 เม.ย. 2564 , [3.] 27 ก.ค. 2564 (1) [4.] 24 ก.ย. 2564 (วันมหิดล) และ ให้เลื่อนวันหยุดชดเชย วันปิยมหาราช จาก 25 ต.ค. 2564 เป็น 22 ต.ค. 2564 , เพิ่มวันหยุดราชการประจำภาค รวม 4 วัน [ภาคเหนือ] 26 มี.ค. 2564 ไหว้พระธาตุประจำปี , [ภาคตะวันออกเฉียงเหนือ] 10 พ.ค. 2564 งานบุญบั้งไฟ , [ภาคใต้] 6 ต.ค. 2564 สารทเดือนสิบ , [ภาคกลาง] 21 ต.ค. 2564 เทศกาลออกพรรษา , [ภาคตะวันออก] 28 ธ.ค. 2564 วันสมเด็จพระเจ้าตากสิน(2) / ธปท. 2 ม.ค. 2564 ประกาศวันหยุดธนาคารปี 2564 เพิ่มเป็นกรณีพิเศษ 2 วัน คือ [1.] 12 ก.พ. 2564 , [2.] 24 ก.ย. 2564 และ เลื่อนวันหยุดชดเชย วันปิยมหาราช ตามประกาศ ครม. ข้างต้น"
+      },
+      "confirmed_by": [
+        "myhora-html",
+        "google-ics"
+      ]
+    },
+    {
+      "date": "2021-02-26",
+      "date_be": "2564-02-26",
+      "day_of_week": "friday",
+      "key": "makha_bucha",
+      "name_th": "วันมาฆบูชา",
+      "name_en": "Makha Bucha Day",
+      "type": "public",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html",
+        "google-ics"
+      ]
+    },
+    {
+      "date": "2021-04-06",
+      "date_be": "2564-04-06",
+      "day_of_week": "tuesday",
+      "key": "chakri_day",
+      "name_th": "วันจักรี",
+      "name_en": "Chakri Memorial Day",
+      "type": "public",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html",
+        "rules",
+        "google-ics"
+      ]
+    },
+    {
+      "date": "2021-04-12",
+      "date_be": "2564-04-12",
+      "day_of_week": "monday",
+      "key": "special_cabinet_holiday",
+      "name_th": "วันสงกรานต์ (ครม.)",
+      "name_en": "Special Cabinet Holiday",
+      "type": "special_cabinet",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html",
+        "google-ics"
+      ]
+    },
+    {
+      "date": "2021-04-13",
+      "date_be": "2564-04-13",
+      "day_of_week": "tuesday",
+      "key": "songkran",
+      "name_th": "วันสงกรานต์",
+      "name_en": "Songkran Festival",
+      "type": "public",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html",
+        "rules",
+        "google-ics"
+      ]
+    },
+    {
+      "date": "2021-04-14",
+      "date_be": "2564-04-14",
+      "day_of_week": "wednesday",
+      "key": "songkran",
+      "name_th": "วันสงกรานต์",
+      "name_en": "Songkran Festival",
+      "type": "public",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html",
+        "rules",
+        "google-ics"
+      ]
+    },
+    {
+      "date": "2021-04-15",
+      "date_be": "2564-04-15",
+      "day_of_week": "thursday",
+      "key": "songkran",
+      "name_th": "วันสงกรานต์",
+      "name_en": "Songkran Festival",
+      "type": "public",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html",
+        "rules",
+        "google-ics"
+      ]
+    },
+    {
+      "date": "2021-05-01",
+      "date_be": "2564-05-01",
+      "day_of_week": "saturday",
+      "key": "labour_day",
+      "name_th": "วันแรงงาน",
+      "name_en": "National Labour Day",
+      "type": "public",
+      "status": "confirmed",
+      "is_day_off": false,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html",
+        "google-ics"
+      ]
+    },
+    {
+      "date": "2021-05-03",
+      "date_be": "2564-05-03",
+      "day_of_week": "monday",
+      "key": "substitution_holiday",
+      "name_th": "วันหยุดชดเชย",
+      "name_en": "Substitution Holiday",
+      "type": "substitution",
+      "status": "confirmed",
+      "is_day_off": false,
+      "substitutes_for": {
+        "date": "2021-05-01",
+        "name_th": "วันแรงงาน"
+      },
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html",
+        "google-ics"
+      ]
+    },
+    {
+      "date": "2021-05-04",
+      "date_be": "2564-05-04",
+      "day_of_week": "tuesday",
+      "key": "coronation_day",
+      "name_th": "วันฉัตรมงคล",
+      "name_en": "Coronation Day",
+      "type": "public",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html",
+        "rules",
+        "google-ics"
+      ]
+    },
+    {
+      "date": "2021-05-10",
+      "date_be": "2564-05-10",
+      "day_of_week": "monday",
+      "key": "royal_ploughing_day",
+      "name_th": "วันพืชมงคล , วันหยุดราชการ (ภาคอีสาน)",
+      "name_en": "Royal Ploughing Ceremony Day",
+      "type": "royal",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html",
+        "google-ics"
+      ]
+    },
+    {
+      "date": "2021-05-26",
+      "date_be": "2564-05-26",
+      "day_of_week": "wednesday",
+      "key": "visakha_bucha",
+      "name_th": "วันวิสาขบูชา",
+      "name_en": "Visakha Bucha Day",
+      "type": "public",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html",
+        "google-ics"
+      ]
+    },
+    {
+      "date": "2021-06-03",
+      "date_be": "2564-06-03",
+      "day_of_week": "thursday",
+      "key": "queen_suthida_birthday",
+      "name_th": "วันอัฏฐมีบูชา วันเฉลิมฯ พระบรมราชินี",
+      "name_en": "HM Queen Suthida's Birthday",
+      "type": "public",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html",
+        "rules",
+        "google-ics"
+      ]
+    },
+    {
+      "date": "2021-07-24",
+      "date_be": "2564-07-24",
+      "day_of_week": "saturday",
+      "key": "asarnha_bucha",
+      "name_th": "วันอาสาฬหบูชา",
+      "name_en": "Asarnha Bucha Day",
+      "type": "public",
+      "status": "confirmed",
+      "is_day_off": false,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html",
+        "google-ics"
+      ]
+    },
+    {
+      "date": "2021-07-25",
+      "date_be": "2564-07-25",
+      "day_of_week": "sunday",
+      "key": "khao_phansa",
+      "name_th": "วันเข้าพรรษา",
+      "name_en": "Buddhist Lent Day",
+      "type": "public",
+      "status": "confirmed",
+      "is_day_off": false,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html",
+        "google-ics"
+      ]
+    },
+    {
+      "date": "2021-07-26",
+      "date_be": "2564-07-26",
+      "day_of_week": "monday",
+      "key": "substitution_holiday",
+      "name_th": "วันหยุดชดเชย",
+      "name_en": "Substitution Holiday",
+      "type": "substitution",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": {
+        "date": "2021-07-25",
+        "name_th": "วันเข้าพรรษา"
+      },
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html",
+        "google-ics"
+      ]
+    },
+    {
+      "date": "2021-07-28",
+      "date_be": "2564-07-28",
+      "day_of_week": "wednesday",
+      "key": "king_vajiralongkorn_birthday",
+      "name_th": "วันเฉลิมฯ พระวชิรเกล้าเจ้าอยู่หัว",
+      "name_en": "HM King Vajiralongkorn's Birthday",
+      "type": "public",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html",
+        "rules",
+        "google-ics"
+      ]
+    },
+    {
+      "date": "2021-08-12",
+      "date_be": "2564-08-12",
+      "day_of_week": "thursday",
+      "key": "queen_mother_birthday",
+      "name_th": "วันแม่",
+      "name_en": "HM Queen Sirikit The Queen Mother's Birthday",
+      "type": "public",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html",
+        "rules",
+        "google-ics"
+      ]
+    },
+    {
+      "date": "2021-09-24",
+      "date_be": "2564-09-24",
+      "day_of_week": "friday",
+      "key": "special_cabinet_holiday",
+      "name_th": "วันมหิดล (ครม.)",
+      "name_en": "Special Cabinet Holiday",
+      "type": "special_cabinet",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": null,
+      "cabinet_resolution": {
+        "date": "2020-12-29",
+        "text": "มติ ครม. 29 ธ.ค. 2563 ประกาศวันหยุดราชการปี 2564 เพิ่มเป็นกรณีพิเศษ 4 วัน คือ [1.] 12 ก.พ. 2564 (วันตรุษจีน) , [2.] 12 เม.ย. 2564 , [3.] 27 ก.ค. 2564 (1) [4.] 24 ก.ย. 2564 (วันมหิดล) และ ให้เลื่อนวันหยุดชดเชย วันปิยมหาราช จาก 25 ต.ค. 2564 เป็น 22 ต.ค. 2564 , เพิ่มวันหยุดราชการประจำภาค รวม 4 วัน [ภาคเหนือ] 26 มี.ค. 2564 ไหว้พระธาตุประจำปี , [ภาคตะวันออกเฉียงเหนือ] 10 พ.ค. 2564 งานบุญบั้งไฟ , [ภาคใต้] 6 ต.ค. 2564 สารทเดือนสิบ , [ภาคกลาง] 21 ต.ค. 2564 เทศกาลออกพรรษา , [ภาคตะวันออก] 28 ธ.ค. 2564 วันสมเด็จพระเจ้าตากสิน(2) / ธปท. 2 ม.ค. 2564 ประกาศวันหยุดธนาคารปี 2564 เพิ่มเป็นกรณีพิเศษ 2 วัน คือ [1.] 12 ก.พ. 2564 , [2.] 24 ก.ย. 2564 และ เลื่อนวันหยุดชดเชย วันปิยมหาราช ตามประกาศ ครม. ข้างต้น"
+      },
+      "confirmed_by": [
+        "myhora-html",
+        "google-ics"
+      ]
+    },
+    {
+      "date": "2021-10-13",
+      "date_be": "2564-10-13",
+      "day_of_week": "wednesday",
+      "key": "king_bhumibol_memorial_day",
+      "name_th": "วันนวมินทรมหาราช",
+      "name_en": "HM King Bhumibol Adulyadej Memorial Day",
+      "type": "public",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html",
+        "rules",
+        "google-ics"
+      ]
+    },
+    {
+      "date": "2021-10-22",
+      "date_be": "2564-10-22",
+      "day_of_week": "friday",
+      "key": "substitution_holiday",
+      "name_th": "วันหยุดชดเชย",
+      "name_en": "Substitution Holiday",
+      "type": "substitution",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": {
+        "date": "2021-07-24",
+        "name_th": "วันอาสาฬหบูชา"
+      },
+      "cabinet_resolution": {
+        "date": "2020-12-29",
+        "text": "มติ ครม. 29 ธ.ค. 2563 ประกาศวันหยุดราชการปี 2564 เพิ่มเป็นกรณีพิเศษ 4 วัน คือ [1.] 12 ก.พ. 2564 (วันตรุษจีน) , [2.] 12 เม.ย. 2564 , [3.] 27 ก.ค. 2564 (1) [4.] 24 ก.ย. 2564 (วันมหิดล) และ ให้เลื่อนวันหยุดชดเชย วันปิยมหาราช จาก 25 ต.ค. 2564 เป็น 22 ต.ค. 2564 , เพิ่มวันหยุดราชการประจำภาค รวม 4 วัน [ภาคเหนือ] 26 มี.ค. 2564 ไหว้พระธาตุประจำปี , [ภาคตะวันออกเฉียงเหนือ] 10 พ.ค. 2564 งานบุญบั้งไฟ , [ภาคใต้] 6 ต.ค. 2564 สารทเดือนสิบ , [ภาคกลาง] 21 ต.ค. 2564 เทศกาลออกพรรษา , [ภาคตะวันออก] 28 ธ.ค. 2564 วันสมเด็จพระเจ้าตากสิน(2) / ธปท. 2 ม.ค. 2564 ประกาศวันหยุดธนาคารปี 2564 เพิ่มเป็นกรณีพิเศษ 2 วัน คือ [1.] 12 ก.พ. 2564 , [2.] 24 ก.ย. 2564 และ เลื่อนวันหยุดชดเชย วันปิยมหาราช ตามประกาศ ครม. ข้างต้น"
+      },
+      "confirmed_by": [
+        "myhora-html",
+        "google-ics"
+      ]
+    },
+    {
+      "date": "2021-10-23",
+      "date_be": "2564-10-23",
+      "day_of_week": "saturday",
+      "key": "chulalongkorn_day",
+      "name_th": "วันปิยมหาราช",
+      "name_en": "Chulalongkorn Day",
+      "type": "public",
+      "status": "confirmed",
+      "is_day_off": false,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html",
+        "rules",
+        "google-ics"
+      ]
+    },
+    {
+      "date": "2021-12-05",
+      "date_be": "2564-12-05",
+      "day_of_week": "sunday",
+      "key": "king_bhumibol_birthday",
+      "name_th": "วันพ่อ",
+      "name_en": "HM King Bhumibol Adulyadej's Birthday (National Father's Day)",
+      "type": "public",
+      "status": "confirmed",
+      "is_day_off": false,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html",
+        "rules",
+        "google-ics"
+      ]
+    },
+    {
+      "date": "2021-12-06",
+      "date_be": "2564-12-06",
+      "day_of_week": "monday",
+      "key": "substitution_holiday",
+      "name_th": "วันหยุดชดเชย",
+      "name_en": "Substitution Holiday",
+      "type": "substitution",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": {
+        "date": "2021-12-05",
+        "name_th": "วันพ่อ"
+      },
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html",
+        "google-ics"
+      ]
+    },
+    {
+      "date": "2021-12-10",
+      "date_be": "2564-12-10",
+      "day_of_week": "friday",
+      "key": "constitution_day",
+      "name_th": "วันรัฐธรรมนูญ",
+      "name_en": "Constitution Day",
+      "type": "public",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html",
+        "rules",
+        "google-ics"
+      ]
+    },
+    {
+      "date": "2021-12-31",
+      "date_be": "2564-12-31",
+      "day_of_week": "friday",
+      "key": "new_year_eve",
+      "name_th": "วันสิ้นปี",
+      "name_en": "New Year's Eve",
+      "type": "public",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html",
+        "rules",
+        "google-ics"
+      ]
+    }
+  ],
+  "warnings": [
+    "Skipped a regional holiday grant (วันหยุดราชการประจำภาค), which is not a nationwide day off: \"เพิ่มวันหยุดราชการประจำภาค รวม 4 วัน [ภาคเหนือ] 26 มี.ค. 2564 ไหว้พระธาตุประจำปี , [ภาคตะวันออกเฉียงเหนือ] 10 พ.ค. 2564 งานบุญบั้งไฟ , [ภาคใต้] 6 ต.ค. 2564 สารทเดือนสิบ , [ภาคกลาง] 21 ต.ค. 2564 เทศกาลออกพรรษา , [ภาคตะวันออก] 28 ธ.ค. 2564 วันสมเด็จพระเจ้าตากสิน\"",
+    "Skipped a ธปท. bank holiday grant, which is out of scope: \"ประกาศวันหยุดธนาคารปี 2564\"",
+    "Could not extract any holiday change from cabinet note: \"มติ ครม. 29 มิ.ย. 2564 ประกาศยกเลิกวันหยุดพิเศษ 27 ก.ค. 2564 ตามที่เคยมีประกาศก่อนหน้า (เพื่อหลีกเลี่ยงการเดินทางช่วงที่มีการแพร่ระบาดของโรคโควิด-19)\"",
+    "Skipped a regional holiday grant (วันหยุดราชการประจำภาค), which is not a nationwide day off: \"ประกาศ 28 ธ.ค.64 เป็นวันหยุดราชการภาคตะวันออก\"",
+    "Cabinet note moves the holiday away from 2021-10-25; it was dropped from 2564.",
+    "MyHora's iCalendar feed covers a different year than 2564; it only ever serves the current year.",
+    "2021-04-12 (วันสงกรานต์ (ครม.)) is a cabinet holiday with no มติ ครม. cited. The day itself is attested; only the citation is missing."
+  ]
+}

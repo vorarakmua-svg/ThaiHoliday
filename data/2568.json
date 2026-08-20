@@ -1,0 +1,492 @@
+{
+  "year": 2025,
+  "year_be": 2568,
+  "status": "confirmed",
+  "frozen": true,
+  "generated_at": "2026-08-20T12:56:52.855Z",
+  "source_urls": [
+    "https://myhora.com/calendar/holiday-2568.aspx",
+    "https://www.myhora.com/calendar/ical/holiday.aspx",
+    "computed from statute — see src/rules/fixed.ts",
+    "https://calendar.google.com/calendar/ical/th.th%23holiday%40group.v.calendar.google.com/public/basic.ics",
+    "https://www.bot.or.th/th/financial-institutions-holiday.html"
+  ],
+  "holidays": [
+    {
+      "date": "2025-01-01",
+      "date_be": "2568-01-01",
+      "day_of_week": "wednesday",
+      "key": "new_year_day",
+      "name_th": "วันขึ้นปีใหม่",
+      "name_en": "New Year's Day",
+      "type": "public",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html",
+        "rules",
+        "google-ics"
+      ]
+    },
+    {
+      "date": "2025-02-12",
+      "date_be": "2568-02-12",
+      "day_of_week": "wednesday",
+      "key": "makha_bucha",
+      "name_th": "วันมาฆบูชา",
+      "name_en": "Makha Bucha Day",
+      "type": "public",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html",
+        "google-ics"
+      ]
+    },
+    {
+      "date": "2025-04-06",
+      "date_be": "2568-04-06",
+      "day_of_week": "sunday",
+      "key": "chakri_day",
+      "name_th": "วันจักรี",
+      "name_en": "Chakri Memorial Day",
+      "type": "public",
+      "status": "confirmed",
+      "is_day_off": false,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html",
+        "rules",
+        "google-ics"
+      ]
+    },
+    {
+      "date": "2025-04-07",
+      "date_be": "2568-04-07",
+      "day_of_week": "monday",
+      "key": "substitution_holiday",
+      "name_th": "วันหยุดชดเชย",
+      "name_en": "Substitution Holiday",
+      "type": "substitution",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": {
+        "date": "2025-04-06",
+        "name_th": "วันจักรี"
+      },
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html",
+        "google-ics"
+      ]
+    },
+    {
+      "date": "2025-04-13",
+      "date_be": "2568-04-13",
+      "day_of_week": "sunday",
+      "key": "songkran",
+      "name_th": "วันสงกรานต์",
+      "name_en": "Songkran Festival",
+      "type": "public",
+      "status": "confirmed",
+      "is_day_off": false,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html",
+        "rules",
+        "google-ics"
+      ]
+    },
+    {
+      "date": "2025-04-14",
+      "date_be": "2568-04-14",
+      "day_of_week": "monday",
+      "key": "songkran",
+      "name_th": "วันสงกรานต์",
+      "name_en": "Songkran Festival",
+      "type": "public",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html",
+        "rules",
+        "google-ics"
+      ]
+    },
+    {
+      "date": "2025-04-15",
+      "date_be": "2568-04-15",
+      "day_of_week": "tuesday",
+      "key": "songkran",
+      "name_th": "วันสงกรานต์",
+      "name_en": "Songkran Festival",
+      "type": "public",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html",
+        "rules",
+        "google-ics"
+      ]
+    },
+    {
+      "date": "2025-04-16",
+      "date_be": "2568-04-16",
+      "day_of_week": "wednesday",
+      "key": "substitution_holiday",
+      "name_th": "วันหยุดชดเชย",
+      "name_en": "Substitution Holiday",
+      "type": "substitution",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": {
+        "date": "2025-04-13",
+        "name_th": "วันสงกรานต์"
+      },
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html",
+        "google-ics"
+      ]
+    },
+    {
+      "date": "2025-05-01",
+      "date_be": "2568-05-01",
+      "day_of_week": "thursday",
+      "key": "labour_day",
+      "name_th": "วันแรงงาน",
+      "name_en": "National Labour Day",
+      "type": "public",
+      "status": "confirmed",
+      "is_day_off": false,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html",
+        "google-ics"
+      ]
+    },
+    {
+      "date": "2025-05-04",
+      "date_be": "2568-05-04",
+      "day_of_week": "sunday",
+      "key": "coronation_day",
+      "name_th": "วันฉัตรมงคล",
+      "name_en": "Coronation Day",
+      "type": "public",
+      "status": "confirmed",
+      "is_day_off": false,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html",
+        "rules",
+        "google-ics"
+      ]
+    },
+    {
+      "date": "2025-05-05",
+      "date_be": "2568-05-05",
+      "day_of_week": "monday",
+      "key": "substitution_holiday",
+      "name_th": "วันหยุดชดเชย",
+      "name_en": "Substitution Holiday",
+      "type": "substitution",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": {
+        "date": "2025-05-04",
+        "name_th": "วันฉัตรมงคล"
+      },
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html",
+        "google-ics"
+      ]
+    },
+    {
+      "date": "2025-05-09",
+      "date_be": "2568-05-09",
+      "day_of_week": "friday",
+      "key": "royal_ploughing_day",
+      "name_th": "วันพืชมงคล",
+      "name_en": "Royal Ploughing Ceremony Day",
+      "type": "royal",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html",
+        "google-ics"
+      ]
+    },
+    {
+      "date": "2025-05-11",
+      "date_be": "2568-05-11",
+      "day_of_week": "sunday",
+      "key": "visakha_bucha",
+      "name_th": "วันวิสาขบูชา",
+      "name_en": "Visakha Bucha Day",
+      "type": "public",
+      "status": "confirmed",
+      "is_day_off": false,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html",
+        "google-ics"
+      ]
+    },
+    {
+      "date": "2025-05-12",
+      "date_be": "2568-05-12",
+      "day_of_week": "monday",
+      "key": "substitution_holiday",
+      "name_th": "วันหยุดชดเชย",
+      "name_en": "Substitution Holiday",
+      "type": "substitution",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": {
+        "date": "2025-05-11",
+        "name_th": "วันวิสาขบูชา"
+      },
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html",
+        "google-ics"
+      ]
+    },
+    {
+      "date": "2025-06-02",
+      "date_be": "2568-06-02",
+      "day_of_week": "monday",
+      "key": "special_cabinet_holiday",
+      "name_th": "วันหยุดพิเศษ (ครม.)",
+      "name_en": "Special Cabinet Holiday",
+      "type": "special_cabinet",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": null,
+      "cabinet_resolution": {
+        "date": "2024-11-12",
+        "text": "มติ ครม. 12 พ.ย. 2567 เพิ่มวันหยุดราชการปี 2568 เป็นกรณีพิเศษ 2 วัน คือ 2 มิ.ย. 2568 และ 11 ส.ค .2568"
+      },
+      "confirmed_by": [
+        "myhora-html",
+        "google-ics"
+      ]
+    },
+    {
+      "date": "2025-06-03",
+      "date_be": "2568-06-03",
+      "day_of_week": "tuesday",
+      "key": "queen_suthida_birthday",
+      "name_th": "วันเฉลิมฯ พระบรมราชินี",
+      "name_en": "HM Queen Suthida's Birthday",
+      "type": "public",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html",
+        "rules",
+        "google-ics"
+      ]
+    },
+    {
+      "date": "2025-07-10",
+      "date_be": "2568-07-10",
+      "day_of_week": "thursday",
+      "key": "asarnha_bucha",
+      "name_th": "วันอาสาฬหบูชา",
+      "name_en": "Asarnha Bucha Day",
+      "type": "public",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html",
+        "google-ics"
+      ]
+    },
+    {
+      "date": "2025-07-11",
+      "date_be": "2568-07-11",
+      "day_of_week": "friday",
+      "key": "khao_phansa",
+      "name_th": "วันเข้าพรรษา",
+      "name_en": "Buddhist Lent Day",
+      "type": "public",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html"
+      ]
+    },
+    {
+      "date": "2025-07-28",
+      "date_be": "2568-07-28",
+      "day_of_week": "monday",
+      "key": "king_vajiralongkorn_birthday",
+      "name_th": "วันเฉลิมฯ พระวชิรเกล้าเจ้าอยู่หัว",
+      "name_en": "HM King Vajiralongkorn's Birthday",
+      "type": "public",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html",
+        "rules",
+        "google-ics"
+      ]
+    },
+    {
+      "date": "2025-08-11",
+      "date_be": "2568-08-11",
+      "day_of_week": "monday",
+      "key": "special_cabinet_holiday",
+      "name_th": "วันหยุดพิเศษ (ครม.)",
+      "name_en": "Special Cabinet Holiday",
+      "type": "special_cabinet",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": null,
+      "cabinet_resolution": {
+        "date": "2024-11-12",
+        "text": "มติ ครม. 12 พ.ย. 2567 เพิ่มวันหยุดราชการปี 2568 เป็นกรณีพิเศษ 2 วัน คือ 2 มิ.ย. 2568 และ 11 ส.ค .2568"
+      },
+      "confirmed_by": [
+        "myhora-html",
+        "google-ics"
+      ]
+    },
+    {
+      "date": "2025-08-12",
+      "date_be": "2568-08-12",
+      "day_of_week": "tuesday",
+      "key": "queen_mother_birthday",
+      "name_th": "วันแม่",
+      "name_en": "HM Queen Sirikit The Queen Mother's Birthday",
+      "type": "public",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html",
+        "rules",
+        "google-ics"
+      ]
+    },
+    {
+      "date": "2025-10-13",
+      "date_be": "2568-10-13",
+      "day_of_week": "monday",
+      "key": "king_bhumibol_memorial_day",
+      "name_th": "วันนวมินทรมหาราช",
+      "name_en": "HM King Bhumibol Adulyadej Memorial Day",
+      "type": "public",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html",
+        "rules",
+        "google-ics"
+      ]
+    },
+    {
+      "date": "2025-10-23",
+      "date_be": "2568-10-23",
+      "day_of_week": "thursday",
+      "key": "chulalongkorn_day",
+      "name_th": "วันปิยมหาราช",
+      "name_en": "Chulalongkorn Day",
+      "type": "public",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html",
+        "rules",
+        "google-ics"
+      ]
+    },
+    {
+      "date": "2025-12-05",
+      "date_be": "2568-12-05",
+      "day_of_week": "friday",
+      "key": "king_bhumibol_birthday",
+      "name_th": "วันพ่อ",
+      "name_en": "HM King Bhumibol Adulyadej's Birthday (National Father's Day)",
+      "type": "public",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html",
+        "rules",
+        "google-ics"
+      ]
+    },
+    {
+      "date": "2025-12-10",
+      "date_be": "2568-12-10",
+      "day_of_week": "wednesday",
+      "key": "constitution_day",
+      "name_th": "วันรัฐธรรมนูญ",
+      "name_en": "Constitution Day",
+      "type": "public",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html",
+        "rules",
+        "google-ics"
+      ]
+    },
+    {
+      "date": "2025-12-31",
+      "date_be": "2568-12-31",
+      "day_of_week": "wednesday",
+      "key": "new_year_eve",
+      "name_th": "วันสิ้นปี",
+      "name_en": "New Year's Eve",
+      "type": "public",
+      "status": "confirmed",
+      "is_day_off": true,
+      "substitutes_for": null,
+      "cabinet_resolution": null,
+      "confirmed_by": [
+        "myhora-html",
+        "rules",
+        "google-ics"
+      ]
+    }
+  ],
+  "warnings": [
+    "MyHora's iCalendar feed covers a different year than 2568; it only ever serves the current year."
+  ]
+}
