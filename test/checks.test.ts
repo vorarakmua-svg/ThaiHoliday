@@ -1,4 +1,4 @@
-import { mkdtempSync, writeFileSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, readdirSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
@@ -6,6 +6,9 @@ import { validateYear } from '../src/validate.js';
 import { loadOverride } from '../src/overrides.js';
 import { diffYear } from '../src/diff.js';
 import { currentYearCe } from '../src/rules/dates.js';
+import { parseYearList } from '../src/args.js';
+import { HttpStatusError, isRetryable } from '../src/http.js';
+import { buildSite, writeYear } from '../src/build.js';
 import type { Holiday, HolidayYear } from '../src/schema.js';
 
 const holiday = (h: Partial<Holiday> = {}): Holiday => ({
@@ -138,5 +141,50 @@ describe('current year', () => {
     // 1 Jan 2027 03:00 in Bangkok is still 31 Dec 2026 in UTC.
     expect(currentYearCe(new Date('2026-12-31T20:00:00Z'))).toBe(2027);
     expect(currentYearCe(new Date('2026-12-31T16:59:59Z'))).toBe(2026);
+  });
+});
+
+describe('year arguments', () => {
+  it('reads lists and ranges', () => {
+    expect(parseYearList('2570, 2560-2562', [])).toEqual([2560, 2561, 2562, 2570]);
+    expect(parseYearList(undefined, [2569])).toEqual([2569]);
+  });
+
+  it('rejects anything it cannot read instead of selecting nothing', () => {
+    expect(() => parseYearList('69', [])).toThrow(/69/);
+    expect(() => parseYearList('2570-2569', [])).toThrow(/2570-2569/);
+  });
+});
+
+describe('unrecognised names', () => {
+  it('are not publishable', () => {
+    const errors = validateYear(year([holiday({ key: 'unknown', name_en: 'วันอะไร' })]));
+    expect(errors.some((e) => e.includes('no recognised key'))).toBe(true);
+  });
+});
+
+describe('HTTP retries', () => {
+  it('gives up at once on a client error', () => {
+    expect(isRetryable(new HttpStatusError('forbidden', 403))).toBe(false);
+    expect(isRetryable(new Error('curl: (22) The requested URL returned error: 404'))).toBe(false);
+  });
+
+  it('retries what may clear up', () => {
+    expect(isRetryable(new HttpStatusError('busy', 503))).toBe(true);
+    expect(isRetryable(new HttpStatusError('slow down', 429))).toBe(true);
+    expect(isRetryable(new Error('curl: (28) Operation timed out'))).toBe(true);
+  });
+});
+
+describe('site build', () => {
+  it('drops files for years no longer in data/', () => {
+    const dataRoot = mkdtempSync(join(tmpdir(), 'data-'));
+    const outDir = mkdtempSync(join(tmpdir(), 'public-'));
+    mkdirSync(join(outDir, 'holidays'));
+    writeFileSync(join(outDir, 'holidays', '2599.json'), '{}', 'utf8');
+    writeYear(year([holiday()]), dataRoot);
+
+    buildSite(dataRoot, outDir);
+    expect(readdirSync(join(outDir, 'holidays')).sort()).toEqual(['2026.json', '2569.json']);
   });
 });

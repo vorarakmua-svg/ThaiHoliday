@@ -108,3 +108,15 @@ describe('CI watchdog', () => {
     expect(report).toContain('npm run refresh');
   });
 });
+
+describe('watching a year not yet collected', () => {
+  it('reports a BOT grant against an empty year', () => {
+    const empty = { ...year([]), holidays: [] };
+    const findings = compareYear(empty, [
+      source('bot-html', [
+        { source: 'bot-html', date: '2026-10-16', name_th: 'วันหยุดพิเศษ (ครม.)', type: 'special_cabinet', is_day_off: true },
+      ]),
+    ]);
+    expect(findings.map((f) => [f.date, f.severity])).toEqual([['2026-10-16', 'cabinet']]);
+  });
+});

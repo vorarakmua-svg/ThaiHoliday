@@ -1,40 +1,19 @@
 import { readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { beYear, currentYearCe } from './rules/dates.js';
+import { beYear, ceYear, currentYearCe } from './rules/dates.js';
 import { collectYear } from './collect.js';
 import { buildSite, DATA_DIR, dataPath, listYears, readYear, writeYear } from './build.js';
 import { diffYear, isEmpty, renderPullRequestBody, type YearDiff } from './diff.js';
 import { validateParsed } from './validate.js';
 import { loadOverride } from './overrides.js';
+import { parseYearList } from './args.js';
 import { compareYear, renderWatchReport, type WatchFinding } from './watch.js';
 import { fetchBotHtml } from './sources/bot-html.js';
 import { fetchGoogleIcs } from './sources/google-ics.js';
-import type { SourceResult } from './schema.js';
+import type { HolidayYear, SourceResult } from './schema.js';
 
 function currentYearBe(): number {
   return beYear(currentYearCe());
-}
-
-/**
- * Parse "2569,2570" or "2560-2568". Anything else is an error rather than being skipped:
- * a typo such as "69" or a reversed range would otherwise select no years at all, and the
- * command would report success having done nothing.
- */
-function parseYearList(value: string | undefined, fallback: number[]): number[] {
-  if (value === undefined) return fallback;
-  const years = new Set<number>();
-  for (const raw of value.split(',')) {
-    const part = raw.trim();
-    const range = /^(\d{4})-(\d{4})$/.exec(part);
-    if (range && Number(range[1]) <= Number(range[2])) {
-      for (let y = Number(range[1]); y <= Number(range[2]); y += 1) years.add(y);
-    } else if (/^\d{4}$/.test(part)) {
-      years.add(Number(part));
-    } else {
-      throw new Error(`Cannot read "${part}" as a Buddhist year or range, e.g. 2569 or 2560-2568.`);
-    }
-  }
-  return [...years].sort((a, b) => a - b);
 }
 
 function flag(args: string[], name: string): boolean {
@@ -83,6 +62,14 @@ async function refresh(args: string[]): Promise<number> {
     console.error(
       `  ${diff.added.length} added, ${diff.removed.length} removed, ${diff.changed.length} changed`,
     );
+
+    // Never write a year CI would reject. Writing it anyway leaves a broken file in the
+    // working tree, and on the self-hosted path a pull request that can only fail.
+    const { errors } = validateParsed(collected);
+    if (errors.length > 0) {
+      for (const error of errors) console.error(`  invalid: ${error}`);
+      throw new Error(`พ.ศ. ${yearBe} failed validation after collection; nothing was written for it.`);
+    }
     if (!dryRun) writeYear(collected);
   }
 
@@ -117,36 +104,48 @@ async function watch(args: string[]): Promise<number> {
   const thisYear = currentYearBe();
   const years = parseYearList(option(args, 'years'), [thisYear, thisYear + 1]);
   const findings: WatchFinding[] = [];
-  // A watchdog that cannot see is worse than none: it reports a quiet day every day. If BOT,
-  // the only witness for cabinet grants, cannot be read, the run fails so someone notices.
-  let botMissed = false;
+  // A watchdog that cannot see is worse than none: it reports a quiet day every day. Any
+  // sign that a source is unreadable fails the run, so the outage is noticed.
+  const blind: string[] = [];
 
   for (const yearBe of years) {
+    // A year nobody has collected yet is still watched, against BOT alone: a grant for next
+    // year is exactly the news that should prompt collecting it. Google is left out there,
+    // since every one of its holidays would be "missing".
     const committed = readYear(yearBe);
-    if (!committed) {
-      console.error(`No committed data for พ.ศ. ${yearBe}; skipping.`);
-      continue;
-    }
+    const baseline: HolidayYear = committed ?? {
+      year: ceYear(yearBe),
+      year_be: yearBe,
+      status: 'provisional',
+      frozen: false,
+      generated_at: '',
+      source_urls: [],
+      holidays: [],
+      warnings: [],
+    };
+    if (!committed) console.error(`No committed data for พ.ศ. ${yearBe}; watching BOT only.`);
+
+    const loaders = [['bot-html', () => fetchBotHtml(yearBe)]] as [string, () => Promise<SourceResult>][];
+    if (committed) loaders.push(['google-ics', () => fetchGoogleIcs(yearBe)]);
 
     const reachable: SourceResult[] = [];
-    for (const [label, load] of [
-      ['bot-html', () => fetchBotHtml(yearBe)],
-      ['google-ics', () => fetchGoogleIcs(yearBe)],
-    ] as const) {
+    for (const [label, load] of loaders) {
       try {
-        reachable.push(await load());
+        const result = await load();
+        // Google always lists this year's and next year's holidays; none at all means the
+        // feed or its format changed, not that Thailand stopped having holidays.
+        if (label === 'google-ics' && result.records.length === 0) {
+          blind.push(`google-ics returned no holidays for ${yearBe}`);
+        }
+        reachable.push(result);
       } catch (error) {
-        if (label === 'bot-html') botMissed = true;
-        console.error(`  ${label} unavailable: ${error instanceof Error ? error.message : String(error)}`);
+        const detail = error instanceof Error ? error.message : String(error);
+        blind.push(`${label} unavailable for ${yearBe}`);
+        console.error(`  ${label} unavailable: ${detail}`);
       }
     }
 
-    if (reachable.length === 0) {
-      console.error(`No sources were reachable for ${yearBe}.`);
-      continue;
-    }
-
-    const yearFindings = compareYear(committed, reachable);
+    const yearFindings = compareYear(baseline, reachable);
     console.error(`พ.ศ. ${yearBe}: ${yearFindings.length} finding(s)`);
     findings.push(...yearFindings);
   }
@@ -167,11 +166,8 @@ async function watch(args: string[]): Promise<number> {
     );
   }
 
-  if (botMissed) {
-    console.error(
-      'The Bank of Thailand page could not be read, so a new มติ ครม. would go unnoticed. ' +
-        'Failing so the outage is visible.',
-    );
+  if (blind.length > 0) {
+    console.error(`The watch could not see everything (${blind.join('; ')}). Failing so it is noticed.`);
     return 1;
   }
   return 0;
@@ -207,6 +203,16 @@ function validate(): number {
     failed += 1;
     console.log(`FAIL  ${yearBe}`);
     for (const error of errors) console.log(`      ${error}`);
+  }
+
+  // Frozen years are what stop the refresh bot rewriting settled history, but freezing is
+  // a manual step each January. Say so where CI will show it, without failing the build.
+  const current = currentYearBe();
+  for (const yearBe of years) {
+    if (yearBe < current && readYear(yearBe)?.frozen === false) {
+      const message = `พ.ศ. ${yearBe} has ended but is not frozen. Run: npx tsx src/cli.ts freeze --years=${yearBe}`;
+      console.log(process.env['GITHUB_ACTIONS'] ? `::warning::${message}` : `note  ${message}`);
+    }
   }
 
   console.log(`\n${years.length - failed}/${years.length} year files valid.`);

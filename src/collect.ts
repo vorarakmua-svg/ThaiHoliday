@@ -77,13 +77,22 @@ export async function collectYear(
     if (warning) warnings.push(warning);
   }
 
+  const primaryFailed = primary.records.length === 0;
+
+  // MyHora's feed is a cross-check on its own page. When the page was read it may confirm
+  // dates but not add them: the page alone applies the มติ ครม. notes, so a day a note moved
+  // away would otherwise come straight back from the feed. A date only the feed has still
+  // surfaces, as a warning for the reviewer.
+  for (const source of sources) {
+    if (source.source === 'myhora-ics' && !primaryFailed) source.corroborateOnly = true;
+  }
+
   // The computed rules normally only corroborate. A statutory date missing from MyHora is
   // far more often a cabinet cancellation than a scrape failure, and reinstating it would
   // publish a day that government offices are actually open.
   //
   // They are promoted to a real source only when the primary returned nothing at all,
   // which means the page itself failed rather than the calendar having changed.
-  const primaryFailed = primary.records.length === 0;
   sources.push({
     source: 'rules',
     url: 'computed from statute — see src/rules/fixed.ts',

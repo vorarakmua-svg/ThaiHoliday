@@ -71,6 +71,13 @@ export function validateYear(year: HolidayYear): string[] {
       }
     }
 
+    // Consumers are told to match on `key`. A name no rule recognises gets "unknown" and
+    // its Thai text as the English name, which is no key at all. Teach src/rules/names.ts
+    // the name, or correct name_th through an override, before publishing.
+    if (holiday.key === 'unknown') {
+      errors.push(`${holiday.date} has no recognised key (name "${holiday.name_th}").`);
+    }
+
     if (holiday.confirmed_by.length === 0) {
       errors.push(`${holiday.date} lists no source.`);
     }

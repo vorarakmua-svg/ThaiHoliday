@@ -69,6 +69,29 @@ async function viaCurl(url: string, timeoutMs: number): Promise<string> {
   return stdout;
 }
 
+/** An HTTP error response, as opposed to a network failure or timeout. */
+export class HttpStatusError extends Error {
+  constructor(
+    message: string,
+    readonly status: number,
+  ) {
+    super(message);
+  }
+}
+
+/**
+ * A 403 or 404 will not change in the next few seconds, and retrying one only hits a
+ * volunteer-run site again for nothing. Timeouts, 5xx, 408 and 429 are worth another try.
+ */
+export function isRetryable(error: unknown): boolean {
+  const status =
+    error instanceof HttpStatusError
+      ? error.status
+      : Number(/returned error: (\d{3})/.exec(error instanceof Error ? error.message : '')?.[1]);
+  if (!Number.isFinite(status) || status === 0) return true;
+  return status >= 500 || status === 408 || status === 429;
+}
+
 async function viaFetch(url: string, timeoutMs: number): Promise<string> {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeoutMs);
@@ -78,7 +101,7 @@ async function viaFetch(url: string, timeoutMs: number): Promise<string> {
       signal: controller.signal,
     });
     if (!response.ok) {
-      throw new Error(`GET ${url} returned ${response.status} ${response.statusText}`);
+      throw new HttpStatusError(`GET ${url} returned ${response.status} ${response.statusText}`, response.status);
     }
     return await response.text();
   } finally {
@@ -109,6 +132,7 @@ export async function fetchText(url: string, options: FetchOptions = {}): Promis
       return body;
     } catch (error) {
       lastError = error;
+      if (!isRetryable(error)) break;
       if (attempt < retries) {
         await new Promise((resolve) => setTimeout(resolve, 2000 * (attempt + 1)));
       }

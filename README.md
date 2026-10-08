@@ -110,7 +110,7 @@ data/overrides/*.yaml  →  myhora-html  →  myhora-ics  →  computed rules  �
 | Source | Role |
 | --- | --- |
 | [MyHora](https://myhora.com/calendar/) per-year page | **Primary.** Distinguishes ราชการ from ธนาคาร columns and prints the มติ ครม. notes |
-| MyHora iCalendar | Cross-check. Current year only — the feed ignores every year parameter |
+| MyHora iCalendar | Cross-check. Current year only — the feed ignores every year parameter. Confirms dates; adds one only if the page itself failed |
 | [Bank of Thailand](https://www.bot.or.th/th/financial-institutions-holiday.html) | Second witness for special cabinet days |
 | Google Thai holiday calendar | Date corroboration only. **Never** a source of names |
 | Computed statutory rules | Corroboration; promoted to a real source only if the primary returns nothing |
@@ -137,7 +137,7 @@ and reported.
 
 ```bash
 npm install
-npm test                          # 88 tests, all offline against vendored fixtures
+npm test                          # 95 tests, all offline against vendored fixtures
 npm run typecheck
 ```
 
@@ -182,11 +182,13 @@ This project does not try to defeat that challenge. The work is split instead:
   BOT follows ครม. for one-off grants, so a fresh มติ ครม. still surfaces within a day. When
   it sees a day this repo lacks, it opens an issue labelled `holiday-watch` — and
   `cabinet-change` when BOT is the one reporting it. An unchanged discrepancy is reported
-  once, not every morning. If the BOT page cannot be read, the run fails rather than
-  passing quietly, so a blind watchdog is visible. It never edits data.
+  once, not every morning. Next year is watched against BOT even before it has been
+  collected. If BOT cannot be read or Google returns no holidays, the run fails rather
+  than passing quietly, so a blind watchdog is visible. It never edits data.
 - **`npm run refresh` runs where MyHora is reachable** — your machine, or a self-hosted
   runner. If MyHora answers with a page that has no calendar rows, refresh fails instead of
-  writing a year rebuilt from the statutory rules alone. That is the only place the lunar dates, วันพืชมงคล and the มติ ครม. notes can be
+  writing a year rebuilt from the statutory rules alone, and it never writes a year that
+  fails `validate`. That is the only place the lunar dates, วันพืชมงคล and the มติ ครม. notes can be
   re-read. Review the diff, then push it as a pull request.
 
 [`refresh.yml`](.github/workflows/refresh.yml) is therefore manual-only. Point its `runner`
@@ -217,8 +219,9 @@ add:
 ### Frozen years
 
 Years before the current one are marked `"frozen": true`. The refresh bot skips them and CI
-fails if one changes, so settled history cannot be quietly rewritten by a source that
-altered its markup. Run `freeze` each January for the year just ended.
+fails if one changes — in a pull request or a direct push — so settled history cannot be
+quietly rewritten by a source that altered its markup. Run `freeze` each January for the
+year just ended; `validate` warns about any ended year that is still unfrozen.
 
 ## Known limitations
 

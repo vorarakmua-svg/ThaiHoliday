@@ -12,12 +12,12 @@ jobs:
   validate:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
         with:
           # The frozen-year guard compares against the base branch.
           fetch-depth: 0
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: 22
           cache: npm
@@ -33,21 +33,38 @@ jobs:
       - name: Validate holiday data
         run: npm run validate
 
+      # Runs on direct pushes too: a frozen year edited straight on main is exactly the
+      # quiet rewrite this guard exists to catch, and it should not pass just because it
+      # skipped review.
       - name: Refuse changes to frozen years
-        if: github.event_name == 'pull_request'
         env:
-          BASE: ${{ github.base_ref }}
+          EVENT: ${{ github.event_name }}
+          BASE_REF: ${{ github.base_ref }}
+          BEFORE: ${{ github.event.before }}
         run: |
           set -euo pipefail
-          git fetch --no-tags --depth=1 origin "$BASE"
-          mapfile -t changed < <(git diff --name-only "origin/$BASE...HEAD" -- 'data/*.json')
+          if [ "$EVENT" = "pull_request" ]; then
+            # Already present from the full checkout. Fetching with --depth here would mark
+            # the base shallow and break the merge-base lookup below.
+            git fetch --no-tags origin "$BASE_REF"
+            base="origin/$BASE_REF"
+            range="$base...HEAD"
+          else
+            base="$BEFORE"
+            if [ -z "$base" ] || ! git cat-file -e "$base^{commit}" 2>/dev/null; then
+              echo "No previous commit to compare against (new branch or force push)."
+              exit 0
+            fi
+            range="$base..HEAD"
+          fi
+          mapfile -t changed < <(git diff --name-only "$range" -- 'data/*.json')
 
           failed=0
           for file in "${changed[@]:-}"; do
             [ -n "$file" ] || continue
-            # A year is protected if it was frozen on the base branch. Freezing a year in
-            # this very PR is allowed; un-freezing or editing an already-frozen one is not.
-            if git show "origin/$BASE:$file" 2>/dev/null \
+            # A year is protected if it was frozen before this change. Freezing a year in
+            # this very change is allowed; un-freezing or editing an already-frozen one is not.
+            if git show "$base:$file" 2>/dev/null \
               | node -e 'let s="";process.stdin.on("data",d=>s+=d).on("end",()=>process.exit(JSON.parse(s).frozen===true?0:1))'
             then
               echo "::error file=$file::$file is a frozen year and must not change."

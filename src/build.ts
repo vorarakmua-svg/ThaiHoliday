@@ -1,4 +1,4 @@
-import { mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { HolidayYear } from './schema.js';
 
@@ -51,6 +51,9 @@ export interface BuildResult {
  */
 export function buildSite(dataRoot = DATA_DIR, outDir = PUBLIC_DIR): BuildResult {
   const holidaysDir = join(outDir, 'holidays');
+  // Start clean, so a year deleted or renamed in data/ is not still served from a
+  // previous build.
+  rmSync(outDir, { recursive: true, force: true });
   mkdirSync(holidaysDir, { recursive: true });
 
   const years: number[] = [];
