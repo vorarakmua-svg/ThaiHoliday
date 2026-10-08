@@ -2,6 +2,7 @@ import type { HolidayYear, SourceResult } from './schema.js';
 import { buildYear } from './merge.js';
 import { loadOverride } from './overrides.js';
 import { fixedHolidays } from './rules/fixed.js';
+import { lunarHolidays } from './rules/lunar.js';
 import { fetchMyhoraHtml, MYHORA_SOURCE } from './sources/myhora-html.js';
 import { fetchMyhoraIcs } from './sources/myhora-ics.js';
 import { fetchGoogleIcs } from './sources/google-ics.js';
@@ -98,9 +99,19 @@ export async function collectYear(
     url: 'computed from statute — see src/rules/fixed.ts',
     records: fixedHolidays(yearBe),
     warnings: primaryFailed
-      ? ['MyHora returned no rows, so the year was rebuilt from statutory rules alone. ' +
-         'Lunar dates, วันพืชมงคล and every มติ ครม. are missing. Do not merge this.']
+      ? ['MyHora returned no rows, so the year was rebuilt from statutory rules and the ' +
+         'lunar calendar alone. วันพืชมงคล, substitutions and every มติ ครม. are missing. ' +
+         'Do not merge this.']
       : [],
+    corroborateOnly: !primaryFailed,
+  });
+  // The lunar calendar follows the same rule: a witness to MyHora's Buddhist holidays, and
+  // a stand-in for them only if the page returned nothing.
+  sources.push({
+    source: 'lunar-calendar',
+    url: 'computed from the Thai lunar calendar — see src/rules/lunar.ts',
+    records: lunarHolidays(yearBe),
+    warnings: [],
     corroborateOnly: !primaryFailed,
   });
 

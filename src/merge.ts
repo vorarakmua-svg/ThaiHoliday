@@ -17,7 +17,14 @@ import { resolveName } from './rules/names.js';
  * มติ ครม. notes. The computed rules sit below both sources but above Google, so a scrape
  * that loses a fixed statutory date still publishes it.
  */
-const PRECEDENCE: SourceId[] = ['override', 'myhora-html', 'myhora-ics', 'rules', 'google-ics'];
+const PRECEDENCE: SourceId[] = [
+  'override',
+  'myhora-html',
+  'myhora-ics',
+  'rules',
+  'lunar-calendar',
+  'google-ics',
+];
 
 /**
  * Google may only corroborate a date that another source already found. Its feed carries
@@ -43,6 +50,12 @@ function unreportedDateWarning(source: SourceId, date: string, name: string): st
       `${date} (${name}) is a fixed statutory holiday, but no source lists it. Either ครม. ` +
       `cancelled or moved it, or the scrape is incomplete. It has been left out — add it ` +
       `through data/overrides if it should be there.`
+    );
+  }
+  if (source === 'lunar-calendar') {
+    return (
+      `The lunar calendar puts ${name} on ${date}, but no source lists that date. Check ` +
+        `whether MyHora has it on another day, or whether it shares a date with another holiday.`
     );
   }
   return (

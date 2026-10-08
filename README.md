@@ -93,18 +93,23 @@ they do not depend on ครม. at all.
 The guiding rule: **compute what is deterministic, scrape only what is not.**
 
 Of ~22 annual holidays, 14 are fixed statutory dates computed in [`src/rules/fixed.ts`](src/rules/fixed.ts).
-Three categories genuinely require a source:
+The four Buddhist holidays — มาฆบูชา, วิสาขบูชา, อาสาฬหบูชา, เข้าพรรษา — are computed too, from
+the Thai lunar calendar in [`src/rules/lunar.ts`](src/rules/lunar.ts), including
+**เดือนแปดสองหน** intercalation. The computation agrees with all 44 lunar dates in 2560–2570,
+and `validate` rejects a lunar holiday published on any other day. It is a check on MyHora,
+not a replacement: MyHora remains the source for whether and how each day is observed.
+
+Two categories genuinely require a source:
 
 | Category | Why it cannot be computed |
 | --- | --- |
-| มาฆบูชา, วิสาขบูชา, อาสาฬหบูชา, เข้าพรรษา | Thai lunar calendar, including **เดือนแปดสองหน** intercalation |
 | วันพืชมงคล | Set annually by ประกาศสำนักพระราชวัง |
 | วันหยุดพิเศษ (ครม.) | Cabinet discretion — unknowable in advance |
 
 Sources are merged in strict precedence order:
 
 ```
-data/overrides/*.yaml  →  myhora-html  →  myhora-ics  →  computed rules  →  google-ics
+data/overrides/*.yaml  →  myhora-html  →  myhora-ics  →  rules  →  lunar-calendar  →  google-ics
 ```
 
 | Source | Role |
@@ -114,6 +119,7 @@ data/overrides/*.yaml  →  myhora-html  →  myhora-ics  →  computed rules  �
 | [Bank of Thailand](https://www.bot.or.th/th/financial-institutions-holiday.html) | Second witness for special cabinet days |
 | Google Thai holiday calendar | Date corroboration only. **Never** a source of names |
 | Computed statutory rules | Corroboration; promoted to a real source only if the primary returns nothing |
+| Computed lunar calendar | Same role for the four Buddhist holidays. Covers 1914–2157 |
 
 ### Why Google is corroboration-only
 
@@ -137,7 +143,7 @@ and reported.
 
 ```bash
 npm install
-npm test                          # 95 tests, all offline against vendored fixtures
+npm test                          # 101 tests, all offline against vendored fixtures
 npm run typecheck
 ```
 
@@ -188,7 +194,7 @@ This project does not try to defeat that challenge. The work is split instead:
 - **`npm run refresh` runs where MyHora is reachable** — your machine, or a self-hosted
   runner. If MyHora answers with a page that has no calendar rows, refresh fails instead of
   writing a year rebuilt from the statutory rules alone, and it never writes a year that
-  fails `validate`. That is the only place the lunar dates, วันพืชมงคล and the มติ ครม. notes can be
+  fails `validate`. That is the only place วันพืชมงคล and the มติ ครม. notes can be
   re-read. Review the diff, then push it as a pull request.
 
 [`refresh.yml`](.github/workflows/refresh.yml) is therefore manual-only. Point its `runner`
@@ -232,8 +238,11 @@ adds it through `data/overrides/`.
 
 **MyHora is a third party**, with no SLA and no data licence. It is a genuinely excellent
 Thai calendar and this project leans on it heavily — please credit it if you build on this.
-If it ever disappears, the fixed statutory rules keep working and the lunar and ครม. days
-degrade to warnings rather than vanishing silently.
+If it ever disappears, the fixed statutory and lunar dates keep working, and วันพืชมงคล and
+the ครม. days degrade to warnings rather than vanishing silently.
+
+**One holiday per date.** When two observances share a day, only one entry survives. In 2561
+วันเข้าพรรษา fell on the King's birthday, 28 ก.ค., and only the birthday is listed.
 
 **`substitutes_for` is inferred, not stated.** No source says which observance a ชดเชย day
 compensates. It is paired with the nearest preceding weekend holiday. When ครม. grants fewer
@@ -248,6 +257,8 @@ who ignore it will be wrong roughly every Q4.
 - [MyHora.com](https://myhora.com/calendar/) — primary calendar data
 - [Bank of Thailand](https://www.bot.or.th/th/financial-institutions-holiday.html) — cabinet holiday announcements
 - Google Thai holiday calendar — date corroboration
+- [python-holidays](https://github.com/vacanza/holidays) (MIT) — the Thai lunar year-type
+  table in `src/rules/lunar.ts`, after Ninenik Narkdee's implementation
 
 Holiday data itself is factual public information. The code in this repository is MIT
 licensed.

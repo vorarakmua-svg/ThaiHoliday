@@ -1,4 +1,5 @@
 import { HolidayYear } from './schema.js';
+import { lunarDates, type LunarHoliday } from './rules/lunar.js';
 import { beYear, currentYearCe, dayOfWeek, isValidIsoDate, isWeekend, toBuddhistIso } from './rules/dates.js';
 
 /**
@@ -15,6 +16,8 @@ export function validateYear(year: HolidayYear): string[] {
   if (year.year_be !== beYear(year.year)) {
     errors.push(`year_be ${year.year_be} does not correspond to year ${year.year}.`);
   }
+
+  const lunar = lunarDates(year.year);
 
   for (const holiday of year.holidays) {
     if (!holiday.date.startsWith(`${year.year}-`)) {
@@ -69,6 +72,16 @@ export function validateYear(year: HolidayYear): string[] {
           `${holiday.date} compensates ${holiday.substitutes_for.date}, which is not a weekend.`,
         );
       }
+    }
+
+    // The Buddhist holidays are fixed points of the lunar calendar. A date that disagrees
+    // with it is far more likely a misread page than a real change; an override is the
+    // escape hatch if ครม. ever does move one.
+    const computed = lunar?.[holiday.key as LunarHoliday];
+    if (computed && computed !== holiday.date && !holiday.confirmed_by.includes('override')) {
+      errors.push(
+        `${holiday.date} is listed as ${holiday.key}, but the lunar calendar puts it on ${computed}.`,
+      );
     }
 
     // Consumers are told to match on `key`. A name no rule recognises gets "unknown" and

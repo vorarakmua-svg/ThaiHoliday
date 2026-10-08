@@ -29,7 +29,15 @@ export const HolidayType = z.enum(['public', 'substitution', 'special_cabinet', 
  */
 export const HolidayStatus = z.enum(['confirmed', 'provisional']);
 
-export const SourceId = z.enum(['override', 'myhora-html', 'myhora-ics', 'google-ics', 'bot-html', 'rules']);
+export const SourceId = z.enum([
+  'override',
+  'myhora-html',
+  'myhora-ics',
+  'google-ics',
+  'bot-html',
+  'rules',
+  'lunar-calendar',
+]);
 
 export const CabinetResolution = z.object({
   /** Date the cabinet met, ISO (CE). Null when the text cites no parseable date. */
