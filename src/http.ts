@@ -86,7 +86,17 @@ async function viaFetch(url: string, timeoutMs: number): Promise<string> {
   }
 }
 
+/**
+ * Successful responses, kept for the life of the process. Several sources serve every year
+ * from one URL — BOT, Google and MyHora's feed — so collecting two years would otherwise
+ * download each of them twice.
+ */
+const responses = new Map<string, string>();
+
 export async function fetchText(url: string, options: FetchOptions = {}): Promise<string> {
+  const cached = responses.get(url);
+  if (cached !== undefined) return cached;
+
   const { timeoutMs = 30_000, retries = 2 } = options;
   const useCurl = await hasCurl();
   let lastError: unknown;
@@ -94,7 +104,9 @@ export async function fetchText(url: string, options: FetchOptions = {}): Promis
   for (let attempt = 0; attempt <= retries; attempt += 1) {
     await pace();
     try {
-      return useCurl ? await viaCurl(url, timeoutMs) : await viaFetch(url, timeoutMs);
+      const body = useCurl ? await viaCurl(url, timeoutMs) : await viaFetch(url, timeoutMs);
+      responses.set(url, body);
+      return body;
     } catch (error) {
       lastError = error;
       if (attempt < retries) {

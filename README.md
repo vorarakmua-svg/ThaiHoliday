@@ -137,7 +137,7 @@ and reported.
 
 ```bash
 npm install
-npm test                          # 72 tests, all offline against vendored fixtures
+npm test                          # 88 tests, all offline against vendored fixtures
 npm run typecheck
 ```
 
@@ -157,7 +157,7 @@ changes.
 | `refresh [--dry-run] [--years=…]` | Re-collect changeable years and render a PR body |
 | `watch [--years=…]` | Compare CI-reachable sources against committed data. Reports only |
 | `verify [YEAR_BE]` | Collect one year live, print it, write nothing |
-| `validate` | Check every file in `data/` against the schema and sanity rules |
+| `validate` | Check every file in `data/` and `data/overrides/` against the schema and sanity rules |
 | `build` | Copy `data/` into `public/v1` for GitHub Pages |
 | `freeze --years=2560-2568` | Mark finished years settled so the bot leaves them alone |
 
@@ -181,9 +181,12 @@ This project does not try to defeat that challenge. The work is split instead:
 - **[`watch.yml`](.github/workflows/watch.yml) runs daily in CI** using only BOT and Google.
   BOT follows ครม. for one-off grants, so a fresh มติ ครม. still surfaces within a day. When
   it sees a day this repo lacks, it opens an issue labelled `holiday-watch` — and
-  `cabinet-change` when BOT is the one reporting it. It never edits data.
+  `cabinet-change` when BOT is the one reporting it. An unchanged discrepancy is reported
+  once, not every morning. If the BOT page cannot be read, the run fails rather than
+  passing quietly, so a blind watchdog is visible. It never edits data.
 - **`npm run refresh` runs where MyHora is reachable** — your machine, or a self-hosted
-  runner. That is the only place the lunar dates, วันพืชมงคล and the มติ ครม. notes can be
+  runner. If MyHora answers with a page that has no calendar rows, refresh fails instead of
+  writing a year rebuilt from the statutory rules alone. That is the only place the lunar dates, วันพืชมงคล and the มติ ครม. notes can be
   re-read. Review the diff, then push it as a pull request.
 
 [`refresh.yml`](.github/workflows/refresh.yml) is therefore manual-only. Point its `runner`
@@ -196,7 +199,9 @@ would train you to ignore the alert.
 ### Overrides
 
 `data/overrides/<yearBe>.yaml` sits above every scraped source. It is the route for anything
-the collector cannot reach on its own, and every entry must carry a `note` saying why:
+the collector cannot reach on its own, and every entry must carry a `note` saying why.
+Unknown keys and dates outside the file's year are errors, and `npm run validate` checks
+every override file, so a typo fails CI instead of silently not applying:
 
 ```yaml
 add:

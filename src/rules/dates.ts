@@ -114,3 +114,14 @@ export function isValidIsoDate(value: string): boolean {
   const dt = new Date(Date.UTC(y!, m! - 1, d!));
   return dt.getUTCFullYear() === y && dt.getUTCMonth() + 1 === m && dt.getUTCDate() === d;
 }
+
+/** Thailand is UTC+7 all year round; it has not observed daylight saving since 1920. */
+const ICT_OFFSET_MS = 7 * 60 * 60 * 1000;
+
+/**
+ * The Gregorian year it currently is in Thailand. Using the UTC year instead would put the
+ * first seven hours of 1 January in the year before.
+ */
+export function currentYearCe(now: Date = new Date()): number {
+  return new Date(now.getTime() + ICT_OFFSET_MS).getUTCFullYear();
+}

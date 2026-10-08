@@ -29,6 +29,12 @@ describe('iCalendar reader', () => {
     ]);
   });
 
+  it('unescapes text in a single pass', () => {
+    // "\\n" is an escaped backslash followed by n, not a newline.
+    const raw = 'BEGIN:VEVENT\nDTSTART;VALUE=DATE:20260102\nSUMMARY:a\\\\nb\\, c\\nd\nEND:VEVENT';
+    expect(parseIcs(raw)[0]!.summary).toBe('a\\nb, c\nd');
+  });
+
   it('ignores events without an all-day DTSTART', () => {
     const raw = 'BEGIN:VEVENT\nDTSTART:20260102T090000Z\nSUMMARY:ประชุม\nEND:VEVENT';
     expect(parseIcs(raw)).toEqual([]);
@@ -99,6 +105,15 @@ describe('Bank of Thailand announcements', () => {
     const result = parseBotHtml(botHtml, 2569);
     // วันแรงงาน is a bank holiday but not a government one; it must not leak in.
     expect(result.records.map((r) => r.date)).not.toContain('2026-05-01');
+  });
+
+  it('does not let the page heading mark an ordinary holiday as a grant', () => {
+    // The heading mentions "เพิ่มเป็นกรณีพิเศษ"; only text after a date describes it.
+    const html =
+      '<p>การกำหนดวันหยุดตามประเพณีและวันหยุดทำการเพิ่มเป็นกรณีพิเศษ ประจำปี พ.ศ. 2569</p>' +
+      '<p>วันพฤหัสบดีที่ 1 มกราคม 2569 วันขึ้นปีใหม่</p>' +
+      '<p>วันศุกร์ที่ 2 มกราคม 2569 เป็นวันหยุดทำการเพิ่มเป็นกรณีพิเศษ</p>';
+    expect(parseBotHtml(html, 2569).records.map((r) => r.date)).toEqual(['2026-01-02']);
   });
 
   it('returns nothing for a year the page does not cover', () => {

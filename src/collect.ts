@@ -30,6 +30,12 @@ export interface CollectOptions {
   overridesRoot?: string;
   frozen?: boolean;
   now?: () => string;
+  /**
+   * Fail instead of falling back to the statutory rules when MyHora returns no rows. The
+   * fallback year is useful to look at but must never be written: it silently drops every
+   * lunar date, วันพืชมงคล and มติ ครม. holiday.
+   */
+  requirePrimary?: boolean;
 }
 
 /**
@@ -43,9 +49,21 @@ export async function collectYear(
   yearBe: number,
   options: CollectOptions = {},
 ): Promise<HolidayYear> {
-  const { overridesRoot, frozen = false, now = () => new Date().toISOString() } = options;
+  const {
+    overridesRoot,
+    frozen = false,
+    now = () => new Date().toISOString(),
+    requirePrimary = false,
+  } = options;
 
   const primary = await fetchMyhoraHtml(yearBe);
+  if (requirePrimary && primary.records.length === 0) {
+    throw new Error(
+      `MyHora returned no calendar rows for พ.ศ. ${yearBe} (${primary.url}). The page was ` +
+        `probably a Cloudflare challenge or its layout changed; refusing to rebuild the year ` +
+        `from statutory rules alone.`,
+    );
+  }
   const sources: SourceResult[] = [primary];
   const warnings: string[] = [];
 

@@ -16,7 +16,13 @@ const FULL_THAI_DATE = new RegExp(
 /** The phrase BOT uses when a day is granted on top of the customary holidays. */
 const SPECIAL_GRANT = 'เพิ่มเป็นกรณีพิเศษ';
 
-/** How far from a date the grant phrase may sit and still refer to it. */
+/**
+ * How far after a date the grant phrase may sit and still refer to it. BOT phrases each
+ * grant as the date followed by its description, so only the text after a date — and
+ * before the next one — belongs to it. Looking backwards as well would let the page
+ * heading ("...วันหยุดทำการเพิ่มเป็นกรณีพิเศษ...ประจำปี พ.ศ. 2569") mark any ordinary
+ * holiday listed just below it as a cabinet grant.
+ */
 const CONTEXT_WINDOW = 250;
 
 /**
@@ -35,16 +41,16 @@ export function parseBotHtml(html: string, yearBe: number): SourceResult {
   const seen = new Set<string>();
   const records: SourceResult['records'] = [];
 
-  FULL_THAI_DATE.lastIndex = 0;
-  let match: RegExpExecArray | null;
-  while ((match = FULL_THAI_DATE.exec(text)) !== null) {
+  const matches = [...text.matchAll(FULL_THAI_DATE)];
+  for (const [i, match] of matches.entries()) {
     const day = Number(match[1]);
     const month = monthFromThaiFull(match[2]!);
     const be = Number(match[3]);
     if (month === null || be !== yearBe) continue;
 
-    const from = Math.max(0, match.index - CONTEXT_WINDOW);
-    const context = text.slice(from, match.index + CONTEXT_WINDOW);
+    const start = match.index + match[0].length;
+    const next = matches[i + 1]?.index ?? text.length;
+    const context = text.slice(start, Math.min(next, start + CONTEXT_WINDOW));
     if (!context.includes(SPECIAL_GRANT)) continue;
 
     const date = iso(yearCe, month, day);
@@ -63,6 +69,16 @@ export function parseBotHtml(html: string, yearBe: number): SourceResult {
   return { source: BOT_SOURCE, url: BOT_URL, records, warnings: [] };
 }
 
+/**
+ * Text the holiday page has always carried. Zero special grants is the normal state of the
+ * page, so an empty result cannot reveal a moved page or an error document on its own.
+ */
+const PAGE_MARKER = 'วันหยุดของสถาบันการเงิน';
+
 export async function fetchBotHtml(yearBe: number): Promise<SourceResult> {
-  return parseBotHtml(await fetchText(BOT_URL), yearBe);
+  const html = await fetchText(BOT_URL);
+  if (!html.includes(PAGE_MARKER)) {
+    throw new Error(`${BOT_URL} no longer looks like the financial-institution holiday page.`);
+  }
+  return parseBotHtml(html, yearBe);
 }

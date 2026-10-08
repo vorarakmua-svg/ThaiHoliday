@@ -27,12 +27,12 @@ function unfold(raw: string): string[] {
   return lines;
 }
 
+/**
+ * One pass, left to right. Chained replacements get `\\n` (an escaped backslash followed
+ * by a literal n) wrong, turning it into a newline.
+ */
 function unescapeText(value: string): string {
-  return value
-    .replace(/\\n/gi, '\n')
-    .replace(/\\,/g, ',')
-    .replace(/\\;/g, ';')
-    .replace(/\\\\/g, '\\');
+  return value.replace(/\\([\\;,nN])/g, (_, char: string) => (char === 'n' || char === 'N' ? '\n' : char));
 }
 
 export function parseIcs(raw: string): IcsEvent[] {

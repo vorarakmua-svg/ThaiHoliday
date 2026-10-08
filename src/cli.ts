@@ -1,27 +1,37 @@
-import { readFileSync, writeFileSync } from 'node:fs';
-import { beYear } from './rules/dates.js';
+import { readdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { join } from 'node:path';
+import { beYear, currentYearCe } from './rules/dates.js';
 import { collectYear } from './collect.js';
 import { buildSite, DATA_DIR, dataPath, listYears, readYear, writeYear } from './build.js';
 import { diffYear, isEmpty, renderPullRequestBody, type YearDiff } from './diff.js';
 import { validateParsed } from './validate.js';
+import { loadOverride } from './overrides.js';
 import { compareYear, renderWatchReport, type WatchFinding } from './watch.js';
 import { fetchBotHtml } from './sources/bot-html.js';
 import { fetchGoogleIcs } from './sources/google-ics.js';
 import type { SourceResult } from './schema.js';
 
 function currentYearBe(): number {
-  return beYear(new Date().getUTCFullYear());
+  return beYear(currentYearCe());
 }
 
+/**
+ * Parse "2569,2570" or "2560-2568". Anything else is an error rather than being skipped:
+ * a typo such as "69" or a reversed range would otherwise select no years at all, and the
+ * command would report success having done nothing.
+ */
 function parseYearList(value: string | undefined, fallback: number[]): number[] {
-  if (!value) return fallback;
+  if (value === undefined) return fallback;
   const years = new Set<number>();
-  for (const part of value.split(',')) {
-    const range = /^(\d{4})-(\d{4})$/.exec(part.trim());
-    if (range) {
+  for (const raw of value.split(',')) {
+    const part = raw.trim();
+    const range = /^(\d{4})-(\d{4})$/.exec(part);
+    if (range && Number(range[1]) <= Number(range[2])) {
       for (let y = Number(range[1]); y <= Number(range[2]); y += 1) years.add(y);
-    } else if (/^\d{4}$/.test(part.trim())) {
-      years.add(Number(part.trim()));
+    } else if (/^\d{4}$/.test(part)) {
+      years.add(Number(part));
+    } else {
+      throw new Error(`Cannot read "${part}" as a Buddhist year or range, e.g. 2569 or 2560-2568.`);
     }
   }
   return [...years].sort((a, b) => a - b);
@@ -58,7 +68,7 @@ async function refresh(args: string[]): Promise<number> {
     }
 
     console.error(`Collecting พ.ศ. ${yearBe} ...`);
-    const collected = await collectYear(yearBe);
+    const collected = await collectYear(yearBe, { requirePrimary: true });
 
     // Ignore the timestamp when comparing, or every run would look like a change.
     const comparable = { ...collected, generated_at: existing?.generated_at ?? collected.generated_at };
@@ -107,6 +117,9 @@ async function watch(args: string[]): Promise<number> {
   const thisYear = currentYearBe();
   const years = parseYearList(option(args, 'years'), [thisYear, thisYear + 1]);
   const findings: WatchFinding[] = [];
+  // A watchdog that cannot see is worse than none: it reports a quiet day every day. If BOT,
+  // the only witness for cabinet grants, cannot be read, the run fails so someone notices.
+  let botMissed = false;
 
   for (const yearBe of years) {
     const committed = readYear(yearBe);
@@ -123,6 +136,7 @@ async function watch(args: string[]): Promise<number> {
       try {
         reachable.push(await load());
       } catch (error) {
+        if (label === 'bot-html') botMissed = true;
         console.error(`  ${label} unavailable: ${error instanceof Error ? error.message : String(error)}`);
       }
     }
@@ -153,6 +167,13 @@ async function watch(args: string[]): Promise<number> {
     );
   }
 
+  if (botMissed) {
+    console.error(
+      'The Bank of Thailand page could not be read, so a new มติ ครม. would go unnoticed. ' +
+        'Failing so the outage is visible.',
+    );
+    return 1;
+  }
   return 0;
 }
 
@@ -189,7 +210,41 @@ function validate(): number {
   }
 
   console.log(`\n${years.length - failed}/${years.length} year files valid.`);
-  return failed > 0 ? 1 : 0;
+  return failed > 0 || !validateOverrides() ? 1 : 0;
+}
+
+/**
+ * Overrides are only read during a refresh, which runs off CI. Without this a malformed
+ * file would sit unnoticed until the next person tried to collect that year.
+ */
+function validateOverrides(root = join(DATA_DIR, 'overrides')): boolean {
+  let names: string[];
+  try {
+    names = readdirSync(root);
+  } catch {
+    return true;
+  }
+
+  let ok = true;
+  for (const name of names.sort()) {
+    if (name === 'README.md') continue;
+    const match = /^(\d{4})\.yaml$/.exec(name);
+    if (!match) {
+      console.log(`FAIL  overrides/${name}`);
+      console.log('      Not named <yearBe>.yaml, so the collector would never read it.');
+      ok = false;
+      continue;
+    }
+    try {
+      loadOverride(Number(match[1]), root);
+      console.log(`ok    overrides/${name}`);
+    } catch (error) {
+      console.log(`FAIL  overrides/${name}`);
+      console.log(`      ${error instanceof Error ? error.message : String(error)}`);
+      ok = false;
+    }
+  }
+  return ok;
 }
 
 function build(): number {

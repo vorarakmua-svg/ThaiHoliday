@@ -48,10 +48,14 @@ jobs:
 
       - name: Collect from sources
         id: collect
+        # The input reaches the shell through the environment, never by template expansion,
+        # so text typed into the form cannot become a command.
+        env:
+          YEARS: ${{ inputs.years }}
         run: |
-          if ! npx tsx src/cli.ts refresh \
-            ${{ inputs.years && format('--years={0}', inputs.years) || '' }} \
-            --body-file=pr-body.md
+          args=(--body-file=pr-body.md)
+          [ -n "$YEARS" ] && args+=("--years=$YEARS")
+          if ! npx tsx src/cli.ts refresh "${args[@]}"
           then
             echo "::error::Collection failed. If this ran on a hosted runner, MyHora was almost" \
               "certainly blocked by Cloudflare — run 'npm run refresh' locally instead."

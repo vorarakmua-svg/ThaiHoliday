@@ -209,6 +209,37 @@ describe('overrides', () => {
     });
     expect(result.holidays[0]!.is_day_off).toBe(false);
   });
+
+  it('applies the English name and status it was given', () => {
+    // Both fields are accepted by the override schema; they must not be silently dropped.
+    const result = mergeYear({
+      yearBe: 2570,
+      provisional: true,
+      sources: [source('myhora-html', [{ source: 'myhora-html', ...NEW_YEAR, date: '2027-01-01' }])],
+      override: {
+        add: [
+          {
+            date: '2027-01-01',
+            name_en: 'New Year',
+            status: 'confirmed',
+            note: 'Ratified early.',
+          },
+        ],
+      },
+    });
+    expect(result.holidays[0]!.name_en).toBe('New Year');
+    expect(result.holidays[0]!.status).toBe('confirmed');
+  });
+
+  it('refuses to add a date from another year', () => {
+    const result = mergeYear({
+      yearBe: 2569,
+      sources: [source('myhora-html', [{ source: 'myhora-html', ...NEW_YEAR }])],
+      override: { add: [{ date: '2027-01-04', note: 'Filed in the wrong year.' }] },
+    });
+    expect(result.holidays.map((h) => h.date)).toEqual(['2026-01-01']);
+    expect(result.warnings.some((w) => w.includes('2027-01-04'))).toBe(true);
+  });
 });
 
 describe('cross-checks over the merged year', () => {

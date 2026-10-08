@@ -59,6 +59,9 @@ interface Candidate {
   substitutes_for: Holiday['substitutes_for'];
   cabinet_resolution: Holiday['cabinet_resolution'];
   confirmed_by: SourceId[];
+  /** Set only by an override; otherwise derived from the name and the year. */
+  name_en?: string;
+  status?: HolidayStatus;
   /** Rank of the best source that has supplied each field so far. */
   nameRank: number;
   typeRank: number;
@@ -143,7 +146,7 @@ export function mergeYear(input: MergeInput): MergeResult {
     }
   }
 
-  applyOverride(candidates, override, warnings);
+  applyOverride(candidates, override, yearCe, warnings);
 
   const holidays: Holiday[] = [...candidates.values()]
     .sort((a, b) => a.date.localeCompare(b.date))
@@ -156,9 +159,9 @@ export function mergeYear(input: MergeInput): MergeResult {
         day_of_week: dayOfWeek(candidate.date),
         key: resolved.key,
         name_th: candidate.name_th,
-        name_en: resolved.name_en,
+        name_en: candidate.name_en ?? resolved.name_en,
         type,
-        status: holidayStatus(type, candidate, input.provisional === true),
+        status: candidate.status ?? holidayStatus(type, candidate, input.provisional === true),
         is_day_off: candidate.is_day_off,
         substitutes_for: candidate.substitutes_for,
         cabinet_resolution: candidate.cabinet_resolution,
@@ -201,6 +204,7 @@ function holidayStatus(
 function applyOverride(
   candidates: Map<string, Candidate>,
   override: OverrideFile | null | undefined,
+  yearCe: number,
   warnings: string[],
 ): void {
   if (!override) return;
@@ -212,6 +216,10 @@ function applyOverride(
   }
 
   for (const entry of override.add ?? []) {
+    if (!entry.date.startsWith(`${yearCe}-`)) {
+      warnings.push(`Override adds ${entry.date}, which is outside ${yearCe}. Ignored.`);
+      continue;
+    }
     const existing = candidates.get(entry.date);
     const target: Candidate = existing ?? {
       date: entry.date,
@@ -238,6 +246,8 @@ function applyOverride(
       target.is_day_off = entry.is_day_off;
       target.dayOffRank = rank('override');
     }
+    if (entry.name_en) target.name_en = entry.name_en;
+    if (entry.status) target.status = entry.status;
     if (entry.cabinet_resolution !== undefined) target.cabinet_resolution = entry.cabinet_resolution;
     if (!target.confirmed_by.includes('override')) target.confirmed_by.unshift('override');
 

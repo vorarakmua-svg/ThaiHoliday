@@ -36,12 +36,14 @@ jobs:
 
       - run: npm ci
 
+      # Fails when the Bank of Thailand page cannot be read, so a blind watchdog shows up as
+      # a red run instead of a quiet one. Findings from Google are still filed below.
       - name: Compare reachable sources against committed data
         id: watch
         run: npx tsx src/cli.ts watch --body-file=watch-report.md
 
       - name: Open or update the tracking issue
-        if: steps.watch.outputs.findings == 'true'
+        if: ${{ !cancelled() && steps.watch.outputs.findings == 'true' }}
         env:
           GH_TOKEN: ${{ github.token }}
           CABINET: ${{ steps.watch.outputs.cabinet }}
@@ -53,11 +55,26 @@ jobs:
           title="Upstream holiday data differs from this repository"
           existing=$(gh issue list --label holiday-watch --state open --limit 1 --json number --jq '.[0].number // empty')
 
+          # Fingerprint the findings so an unchanged discrepancy is reported once, not
+          # restated in a fresh comment every morning until someone acts on it.
+          fingerprint="watch-fingerprint:$(sha256sum watch-report.md | cut -c1-16)"
+          printf '\n<!-- %s -->\n' "$fingerprint" >> watch-report.md
+
           if [ -n "$existing" ]; then
             # Comment rather than opening a second issue, so a long-running discrepancy
             # does not turn into a pile of duplicates.
-            gh issue comment "$existing" --body-file watch-report.md
-            echo "Commented on existing issue #$existing"
+            reported=$(gh issue view "$existing" --json body,comments \
+              --jq '[.body] + [.comments[].body] | join("\n")')
+            if grep -qF "$fingerprint" <<< "$reported"; then
+              echo "Issue #$existing already reports these findings."
+            else
+              gh issue comment "$existing" --body-file watch-report.md
+              echo "Commented on existing issue #$existing"
+            fi
+            # An issue opened for a Google-only discrepancy must escalate once BOT reports one.
+            if [ "$CABINET" = "true" ]; then
+              gh issue edit "$existing" --add-label cabinet-change
+            fi
           else
             labels="holiday-watch"
             [ "$CABINET" = "true" ] && labels="$labels,cabinet-change"
