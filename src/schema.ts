@@ -37,6 +37,7 @@ export const SourceId = z.enum([
   'bot-html',
   'rules',
   'lunar-calendar',
+  'python-holidays',
 ]);
 
 export const CabinetResolution = z.object({

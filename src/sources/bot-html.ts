@@ -26,9 +26,14 @@ const SPECIAL_GRANT = 'เพิ่มเป็นกรณีพิเศษ';
 const CONTEXT_WINDOW = 250;
 
 /**
- * The Bank of Thailand announces financial-institution holidays, which follow ครม. for
- * one-off grants. That makes the page a useful second witness for special cabinet days:
+ * The Bank of Thailand announces financial-institution holidays, which usually follow ครม.
+ * for one-off grants. That makes the page a useful second witness for special cabinet days:
  * it confirmed 16 ตุลาคม 2569 while MyHora's calendar table still had no row for it.
+ *
+ * It is a witness only. Bank holidays are not government holidays — BOT can grant banks a
+ * day that government offices work, or scope one to Bangkok — so in the merge BOT may
+ * confirm a date a government source found but never add one, and the watch reports its
+ * grants as leads to check against the มติ ครม., not as facts.
  *
  * Only special grants are read. BOT's regular list is a different set from the government
  * one — it excludes วันพืชมงคล and includes วันแรงงาน — so importing it wholesale would be

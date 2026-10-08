@@ -27,11 +27,17 @@ const PRECEDENCE: SourceId[] = [
 ];
 
 /**
- * Google may only corroborate a date that another source already found. Its feed carries
- * mislabelled and misspelled names and omits real holidays, so letting it introduce a day
- * would publish Google's mistakes as Thai government policy.
+ * Sources that may only corroborate a date another source already found.
+ *
+ * Google's feed carries mislabelled and misspelled names and omits real holidays, so
+ * letting it introduce a day would publish Google's mistakes as Thai government policy.
+ *
+ * BOT publishes the financial-institution calendar, which is not the government one. It
+ * grants bank-only days, scopes some grants to Bangkok, and does not follow every
+ * government day off. A day it introduced would be a bank holiday presented as a
+ * วันหยุดราชการ, so it can confirm a date but never add one.
  */
-const CORROBORATION_ONLY: ReadonlySet<SourceId> = new Set<SourceId>(['google-ics']);
+const CORROBORATION_ONLY: ReadonlySet<SourceId> = new Set<SourceId>(['google-ics', 'bot-html']);
 
 function rank(source: SourceId): number {
   const index = PRECEDENCE.indexOf(source);

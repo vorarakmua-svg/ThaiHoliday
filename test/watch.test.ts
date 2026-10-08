@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { compareYear, renderWatchReport } from '../src/watch.js';
+import { parsePythonHolidays } from '../src/sources/python-holidays.js';
 import type { HolidayYear, SourceResult } from '../src/schema.js';
 
 const year = (holidays: Partial<HolidayYear['holidays'][number]>[]): HolidayYear => ({
@@ -118,5 +119,40 @@ describe('watching a year not yet collected', () => {
       ]),
     ]);
     expect(findings.map((f) => [f.date, f.severity])).toEqual([['2026-10-16', 'cabinet']]);
+  });
+});
+
+describe('python-holidays as a witness', () => {
+  const raw = JSON.stringify({
+    version: '0.106',
+    holidays: [
+      { date: '2026-01-01', name_th: 'วันขึ้นปีใหม่' },
+      { date: '2026-01-10', name_th: 'วันเด็กแห่งชาติ' },
+      { date: '2026-05-01', name_th: 'วันแรงงานแห่งชาติ' },
+      { date: '2026-12-07', name_th: 'ชดเชยวันพ่อแห่งชาติ' },
+      { date: '2026-12-08', name_th: 'วันหยุดพิเศษ (เพิ่มเติม)' },
+      { date: '2027-01-01', name_th: 'วันขึ้นปีใหม่' },
+    ],
+  });
+
+  it('reads only the requested year', () => {
+    expect(parsePythonHolidays(raw, 2569).records.map((r) => r.date)).not.toContain('2027-01-01');
+  });
+
+  it('reports weekday days off the data lacks or calls working days, and nothing else', () => {
+    const committed = year([
+      {},
+      { date: '2026-12-07', date_be: '2569-12-07', day_of_week: 'monday', is_day_off: false, name_th: 'วันหยุดชดเชย' },
+    ]);
+    const findings = compareYear(committed, [parsePythonHolidays(raw, 2569)]);
+    // วันเด็ก is a Saturday and วันแรงงาน is a working day for government offices.
+    expect(findings.map((f) => [f.date, f.severity])).toEqual([
+      ['2026-12-07', 'possible'],
+      ['2026-12-08', 'possible'],
+    ]);
+  });
+
+  it('fails loudly on output it does not understand', () => {
+    expect(() => parsePythonHolidays('{"holidays": "nope"}', 2569)).toThrow();
   });
 });

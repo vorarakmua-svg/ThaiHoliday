@@ -10,6 +10,7 @@ import { parseYearList } from './args.js';
 import { compareYear, renderWatchReport, type WatchFinding } from './watch.js';
 import { fetchBotHtml } from './sources/bot-html.js';
 import { fetchGoogleIcs } from './sources/google-ics.js';
+import { loadPythonHolidays } from './sources/python-holidays.js';
 import type { HolidayYear, SourceResult } from './schema.js';
 
 function currentYearBe(): number {
@@ -126,16 +127,19 @@ async function watch(args: string[]): Promise<number> {
     if (!committed) console.error(`No committed data for พ.ศ. ${yearBe}; watching BOT only.`);
 
     const loaders = [['bot-html', () => fetchBotHtml(yearBe)]] as [string, () => Promise<SourceResult>][];
-    if (committed) loaders.push(['google-ics', () => fetchGoogleIcs(yearBe)]);
+    if (committed) {
+      loaders.push(['google-ics', () => fetchGoogleIcs(yearBe)]);
+      loaders.push(['python-holidays', () => loadPythonHolidays(yearBe)]);
+    }
 
     const reachable: SourceResult[] = [];
     for (const [label, load] of loaders) {
       try {
         const result = await load();
-        // Google always lists this year's and next year's holidays; none at all means the
-        // feed or its format changed, not that Thailand stopped having holidays.
-        if (label === 'google-ics' && result.records.length === 0) {
-          blind.push(`google-ics returned no holidays for ${yearBe}`);
+        // Google and python-holidays always list this year's and next year's holidays; none
+        // at all means the feed or its format changed, not that Thailand stopped having them.
+        if (label !== 'bot-html' && result.records.length === 0) {
+          blind.push(`${label} returned no holidays for ${yearBe}`);
         }
         reachable.push(result);
       } catch (error) {

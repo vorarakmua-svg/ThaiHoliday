@@ -1,0 +1,9 @@
+# python-holidays, used by the daily watch as an independent witness. Installed with
+# `pip install --require-hashes -r requirements-ci.txt`, so CI only ever runs these exact
+# files. To upgrade, bump the versions and replace the hashes (`pip hash <wheel>`).
+holidays==0.106 \
+    --hash=sha256:4be3fb5be6a88a232e92f96825e4fab9b80710caabde90b7c476e57ba0ed9f5d
+python-dateutil==2.9.0.post0 \
+    --hash=sha256:a8b2bc7bffae282281c8140a97d3aa9c14da0b136dfe83f850eea9a5f7470427
+six==1.17.0 \
+    --hash=sha256:4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274
