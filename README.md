@@ -93,27 +93,33 @@ they do not depend on ครม. at all.
 The guiding rule: **compute what is deterministic, scrape only what is not.**
 
 Of ~22 annual holidays, 14 are fixed statutory dates computed in [`src/rules/fixed.ts`](src/rules/fixed.ts).
-Three categories genuinely require a source:
+The four Buddhist holidays — มาฆบูชา, วิสาขบูชา, อาสาฬหบูชา, เข้าพรรษา — are computed too, from
+the Thai lunar calendar in [`src/rules/lunar.ts`](src/rules/lunar.ts), including
+**เดือนแปดสองหน** intercalation. The computation agrees with all 44 lunar dates in 2560–2570,
+and `validate` rejects a lunar holiday published on any other day. It is a check on MyHora,
+not a replacement: MyHora remains the source for whether and how each day is observed.
+
+Two categories genuinely require a source:
 
 | Category | Why it cannot be computed |
 | --- | --- |
-| มาฆบูชา, วิสาขบูชา, อาสาฬหบูชา, เข้าพรรษา | Thai lunar calendar, including **เดือนแปดสองหน** intercalation |
 | วันพืชมงคล | Set annually by ประกาศสำนักพระราชวัง |
 | วันหยุดพิเศษ (ครม.) | Cabinet discretion — unknowable in advance |
 
 Sources are merged in strict precedence order:
 
 ```
-data/overrides/*.yaml  →  myhora-html  →  myhora-ics  →  computed rules  →  google-ics
+data/overrides/*.yaml  →  myhora-html  →  myhora-ics  →  rules  →  lunar-calendar  →  google-ics
 ```
 
 | Source | Role |
 | --- | --- |
 | [MyHora](https://myhora.com/calendar/) per-year page | **Primary.** Distinguishes ราชการ from ธนาคาร columns and prints the มติ ครม. notes |
-| MyHora iCalendar | Cross-check. Current year only — the feed ignores every year parameter |
-| [Bank of Thailand](https://www.bot.or.th/th/financial-institutions-holiday.html) | Second witness for special cabinet days |
+| MyHora iCalendar | Cross-check. Current year only — the feed ignores every year parameter. Confirms dates; adds one only if the page itself failed |
+| [Bank of Thailand](https://www.bot.or.th/th/financial-institutions-holiday.html) | Witness for special cabinet days. **Bank holidays are not government holidays**, so BOT may confirm a date but never add one |
 | Google Thai holiday calendar | Date corroboration only. **Never** a source of names |
 | Computed statutory rules | Corroboration; promoted to a real source only if the primary returns nothing |
+| Computed lunar calendar | Same role for the four Buddhist holidays. Covers 1914–2157 |
 
 ### Why Google is corroboration-only
 
@@ -137,7 +143,7 @@ and reported.
 
 ```bash
 npm install
-npm test                          # 72 tests, all offline against vendored fixtures
+npm test                          # 106 tests, all offline against vendored fixtures
 npm run typecheck
 ```
 
@@ -157,7 +163,7 @@ changes.
 | `refresh [--dry-run] [--years=…]` | Re-collect changeable years and render a PR body |
 | `watch [--years=…]` | Compare CI-reachable sources against committed data. Reports only |
 | `verify [YEAR_BE]` | Collect one year live, print it, write nothing |
-| `validate` | Check every file in `data/` against the schema and sanity rules |
+| `validate` | Check every file in `data/` and `data/overrides/` against the schema and sanity rules |
 | `build` | Copy `data/` into `public/v1` for GitHub Pages |
 | `freeze --years=2560-2568` | Mark finished years settled so the bot leaves them alone |
 
@@ -178,25 +184,39 @@ returning `200` from an ordinary connection. Measured from a runner on 2026-08-2
 
 This project does not try to defeat that challenge. The work is split instead:
 
-- **[`watch.yml`](.github/workflows/watch.yml) runs daily in CI** using only BOT and Google.
-  BOT follows ครม. for one-off grants, so a fresh มติ ครม. still surfaces within a day. When
+- **[`watch.yml`](.github/workflows/watch.yml) runs daily in CI** using BOT, Google and
+  [python-holidays](https://github.com/vacanza/holidays), all free and reachable from GitHub's
+  hosted runners. BOT usually follows ครม. for one-off grants, so a fresh มติ ครม. tends to
+  surface within a day — as a lead to check, since a BOT grant may be for banks only.
+  python-holidays is an independently maintained library, installed from PyPI with pinned
+  hashes; only its weekday days off are compared, since those are the claims about whether
+  offices close. Run the workflow by hand with `years: 2560-2570` to audit history. When
   it sees a day this repo lacks, it opens an issue labelled `holiday-watch` — and
-  `cabinet-change` when BOT is the one reporting it. It never edits data.
+  `cabinet-change` when BOT is the one reporting it. An unchanged discrepancy is reported
+  once, not every morning. Next year is watched against BOT even before it has been
+  collected. If any source cannot be read or returns nothing, the run fails rather than
+  passing quietly, so a blind watchdog is visible. It never edits data.
 - **`npm run refresh` runs where MyHora is reachable** — your machine, or a self-hosted
-  runner. That is the only place the lunar dates, วันพืชมงคล and the มติ ครม. notes can be
+  runner. If MyHora answers with a page that has no calendar rows, refresh fails instead of
+  writing a year rebuilt from the statutory rules alone, and it never writes a year that
+  fails `validate`. That is the only place วันพืชมงคล and the มติ ครม. notes can be
   re-read. Review the diff, then push it as a pull request.
 
 [`refresh.yml`](.github/workflows/refresh.yml) is therefore manual-only. Point its `runner`
 input at a self-hosted label and it works end-to-end unchanged.
 
-The watchdog deliberately ignores วันแรงงาน and its compensatory day: Google counts both as
-public holidays, they are working days for government offices, and reporting them every year
-would train you to ignore the alert.
+To run the watch locally, `pip install -r requirements-ci.txt` first.
+
+The watchdog deliberately ignores วันแรงงาน and its compensatory day: Google and
+python-holidays count both as public holidays, they are working days for government
+offices, and reporting them every year would train you to ignore the alert.
 
 ### Overrides
 
 `data/overrides/<yearBe>.yaml` sits above every scraped source. It is the route for anything
-the collector cannot reach on its own, and every entry must carry a `note` saying why:
+the collector cannot reach on its own, and every entry must carry a `note` saying why.
+Unknown keys and dates outside the file's year are errors, and `npm run validate` checks
+every override file, so a typo fails CI instead of silently not applying:
 
 ```yaml
 add:
@@ -212,8 +232,9 @@ add:
 ### Frozen years
 
 Years before the current one are marked `"frozen": true`. The refresh bot skips them and CI
-fails if one changes, so settled history cannot be quietly rewritten by a source that
-altered its markup. Run `freeze` each January for the year just ended.
+fails if one changes — in a pull request or a direct push — so settled history cannot be
+quietly rewritten by a source that altered its markup. Run `freeze` each January for the
+year just ended; `validate` warns about any ended year that is still unfrozen.
 
 ## Known limitations
 
@@ -224,8 +245,11 @@ adds it through `data/overrides/`.
 
 **MyHora is a third party**, with no SLA and no data licence. It is a genuinely excellent
 Thai calendar and this project leans on it heavily — please credit it if you build on this.
-If it ever disappears, the fixed statutory rules keep working and the lunar and ครม. days
-degrade to warnings rather than vanishing silently.
+If it ever disappears, the fixed statutory and lunar dates keep working, and วันพืชมงคล and
+the ครม. days degrade to warnings rather than vanishing silently.
+
+**One holiday per date.** When two observances share a day, only one entry survives. In 2561
+วันเข้าพรรษา fell on the King's birthday, 28 ก.ค., and only the birthday is listed.
 
 **`substitutes_for` is inferred, not stated.** No source says which observance a ชดเชย day
 compensates. It is paired with the nearest preceding weekend holiday. When ครม. grants fewer
@@ -240,6 +264,9 @@ who ignore it will be wrong roughly every Q4.
 - [MyHora.com](https://myhora.com/calendar/) — primary calendar data
 - [Bank of Thailand](https://www.bot.or.th/th/financial-institutions-holiday.html) — cabinet holiday announcements
 - Google Thai holiday calendar — date corroboration
+- [python-holidays](https://github.com/vacanza/holidays) (MIT) — a witness in the daily watch,
+  and the Thai lunar year-type table in `src/rules/lunar.ts`, after Ninenik Narkdee's
+  implementation
 
 Holiday data itself is factual public information. The code in this repository is MIT
 licensed.

@@ -65,6 +65,40 @@ describe('Google is corroboration only', () => {
   });
 });
 
+describe('BOT is a bank calendar, not a government one', () => {
+  it('cannot add a day off of its own', () => {
+    // A bank-only grant must never be published as a วันหยุดราชการ.
+    const result = mergeYear({
+      yearBe: 2569,
+      sources: [
+        source('myhora-html', [{ source: 'myhora-html', ...NEW_YEAR }]),
+        source('bot-html', [
+          { source: 'bot-html', date: '2026-08-14', name_th: 'วันหยุดพิเศษ (ครม.)', type: 'special_cabinet', is_day_off: true },
+        ]),
+      ],
+    });
+    expect(result.holidays.map((h) => h.date)).toEqual(['2026-01-01']);
+    expect(result.warnings.some((w) => w.includes('2026-08-14'))).toBe(true);
+  });
+
+  it('cannot turn a government working day into a day off', () => {
+    const result = mergeYear({
+      yearBe: 2569,
+      sources: [
+        source('myhora-html', [
+          { source: 'myhora-html', date: '2026-05-01', name_th: 'วันแรงงาน', is_day_off: false },
+        ]),
+        source('bot-html', [
+          { source: 'bot-html', date: '2026-05-01', name_th: 'วันหยุดพิเศษ (ครม.)', type: 'special_cabinet', is_day_off: true },
+        ]),
+      ],
+    });
+    expect(result.holidays[0]!.is_day_off).toBe(false);
+    expect(result.holidays[0]!.type).toBe('public');
+    expect(result.holidays[0]!.confirmed_by).toContain('bot-html');
+  });
+});
+
 describe('the computed rules must not reinstate a cancelled holiday', () => {
   it('refuses to introduce a statutory date when it is only corroborating', () => {
     // ครม. postponed Songkran 2563 for COVID. MyHora correctly dropped those rows, and
@@ -208,6 +242,37 @@ describe('overrides', () => {
       },
     });
     expect(result.holidays[0]!.is_day_off).toBe(false);
+  });
+
+  it('applies the English name and status it was given', () => {
+    // Both fields are accepted by the override schema; they must not be silently dropped.
+    const result = mergeYear({
+      yearBe: 2570,
+      provisional: true,
+      sources: [source('myhora-html', [{ source: 'myhora-html', ...NEW_YEAR, date: '2027-01-01' }])],
+      override: {
+        add: [
+          {
+            date: '2027-01-01',
+            name_en: 'New Year',
+            status: 'confirmed',
+            note: 'Ratified early.',
+          },
+        ],
+      },
+    });
+    expect(result.holidays[0]!.name_en).toBe('New Year');
+    expect(result.holidays[0]!.status).toBe('confirmed');
+  });
+
+  it('refuses to add a date from another year', () => {
+    const result = mergeYear({
+      yearBe: 2569,
+      sources: [source('myhora-html', [{ source: 'myhora-html', ...NEW_YEAR }])],
+      override: { add: [{ date: '2027-01-04', note: 'Filed in the wrong year.' }] },
+    });
+    expect(result.holidays.map((h) => h.date)).toEqual(['2026-01-01']);
+    expect(result.warnings.some((w) => w.includes('2027-01-04'))).toBe(true);
   });
 });
 

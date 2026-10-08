@@ -1,5 +1,6 @@
 import { HolidayYear } from './schema.js';
-import { isWeekend } from './rules/dates.js';
+import { lunarDates, type LunarHoliday } from './rules/lunar.js';
+import { beYear, currentYearCe, dayOfWeek, isValidIsoDate, isWeekend, toBuddhistIso } from './rules/dates.js';
 
 /**
  * Checks run on every pull request, above and beyond the schema.
@@ -12,6 +13,12 @@ export function validateYear(year: HolidayYear): string[] {
   const errors: string[] = [];
   const seen = new Set<string>();
 
+  if (year.year_be !== beYear(year.year)) {
+    errors.push(`year_be ${year.year_be} does not correspond to year ${year.year}.`);
+  }
+
+  const lunar = lunarDates(year.year);
+
   for (const holiday of year.holidays) {
     if (!holiday.date.startsWith(`${year.year}-`)) {
       errors.push(`${holiday.date} is not inside year ${year.year}.`);
@@ -21,8 +28,19 @@ export function validateYear(year: HolidayYear): string[] {
     }
     seen.add(holiday.date);
 
-    if (holiday.date_be.slice(5) !== holiday.date.slice(5)) {
+    // The schema only checks the shape. A hand-edited "2026-02-30" or a day name copied
+    // from the wrong row would otherwise be published as-is.
+    if (!isValidIsoDate(holiday.date)) {
+      errors.push(`${holiday.date} is not a real calendar date.`);
+      continue;
+    }
+    if (holiday.date_be !== toBuddhistIso(holiday.date)) {
       errors.push(`${holiday.date}: Buddhist date ${holiday.date_be} does not match.`);
+    }
+    if (holiday.day_of_week !== dayOfWeek(holiday.date)) {
+      errors.push(
+        `${holiday.date} is a ${dayOfWeek(holiday.date)}, but day_of_week says ${holiday.day_of_week}.`,
+      );
     }
 
     // A future cabinet holiday with no citation is unsafe to publish as settled: nothing
@@ -32,7 +50,7 @@ export function validateYear(year: HolidayYear): string[] {
       holiday.type === 'special_cabinet' &&
       holiday.status === 'confirmed' &&
       !holiday.cabinet_resolution &&
-      year.year > new Date().getUTCFullYear()
+      year.year > currentYearCe()
     ) {
       errors.push(
         `${holiday.date} is a confirmed special cabinet holiday in a future year but cites ` +
@@ -56,6 +74,23 @@ export function validateYear(year: HolidayYear): string[] {
       }
     }
 
+    // The Buddhist holidays are fixed points of the lunar calendar. A date that disagrees
+    // with it is far more likely a misread page than a real change; an override is the
+    // escape hatch if ครม. ever does move one.
+    const computed = lunar?.[holiday.key as LunarHoliday];
+    if (computed && computed !== holiday.date && !holiday.confirmed_by.includes('override')) {
+      errors.push(
+        `${holiday.date} is listed as ${holiday.key}, but the lunar calendar puts it on ${computed}.`,
+      );
+    }
+
+    // Consumers are told to match on `key`. A name no rule recognises gets "unknown" and
+    // its Thai text as the English name, which is no key at all. Teach src/rules/names.ts
+    // the name, or correct name_th through an override, before publishing.
+    if (holiday.key === 'unknown') {
+      errors.push(`${holiday.date} has no recognised key (name "${holiday.name_th}").`);
+    }
+
     if (holiday.confirmed_by.length === 0) {
       errors.push(`${holiday.date} lists no source.`);
     }
@@ -69,6 +104,9 @@ export function validateYear(year: HolidayYear): string[] {
   const anyProvisional = year.holidays.some((h) => h.status === 'provisional');
   if (anyProvisional && year.status !== 'provisional') {
     errors.push(`${year.year_be} contains provisional holidays but is marked confirmed.`);
+  }
+  if (!anyProvisional && year.status === 'provisional') {
+    errors.push(`${year.year_be} is marked provisional but every holiday in it is confirmed.`);
   }
 
   return errors;

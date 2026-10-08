@@ -2,6 +2,7 @@ import type { HolidayYear, SourceResult } from './schema.js';
 import { buildYear } from './merge.js';
 import { loadOverride } from './overrides.js';
 import { fixedHolidays } from './rules/fixed.js';
+import { lunarHolidays } from './rules/lunar.js';
 import { fetchMyhoraHtml, MYHORA_SOURCE } from './sources/myhora-html.js';
 import { fetchMyhoraIcs } from './sources/myhora-ics.js';
 import { fetchGoogleIcs } from './sources/google-ics.js';
@@ -30,6 +31,12 @@ export interface CollectOptions {
   overridesRoot?: string;
   frozen?: boolean;
   now?: () => string;
+  /**
+   * Fail instead of falling back to the statutory rules when MyHora returns no rows. The
+   * fallback year is useful to look at but must never be written: it silently drops every
+   * lunar date, วันพืชมงคล and มติ ครม. holiday.
+   */
+  requirePrimary?: boolean;
 }
 
 /**
@@ -43,9 +50,21 @@ export async function collectYear(
   yearBe: number,
   options: CollectOptions = {},
 ): Promise<HolidayYear> {
-  const { overridesRoot, frozen = false, now = () => new Date().toISOString() } = options;
+  const {
+    overridesRoot,
+    frozen = false,
+    now = () => new Date().toISOString(),
+    requirePrimary = false,
+  } = options;
 
   const primary = await fetchMyhoraHtml(yearBe);
+  if (requirePrimary && primary.records.length === 0) {
+    throw new Error(
+      `MyHora returned no calendar rows for พ.ศ. ${yearBe} (${primary.url}). The page was ` +
+        `probably a Cloudflare challenge or its layout changed; refusing to rebuild the year ` +
+        `from statutory rules alone.`,
+    );
+  }
   const sources: SourceResult[] = [primary];
   const warnings: string[] = [];
 
@@ -59,21 +78,40 @@ export async function collectYear(
     if (warning) warnings.push(warning);
   }
 
+  const primaryFailed = primary.records.length === 0;
+
+  // MyHora's feed is a cross-check on its own page. When the page was read it may confirm
+  // dates but not add them: the page alone applies the มติ ครม. notes, so a day a note moved
+  // away would otherwise come straight back from the feed. A date only the feed has still
+  // surfaces, as a warning for the reviewer.
+  for (const source of sources) {
+    if (source.source === 'myhora-ics' && !primaryFailed) source.corroborateOnly = true;
+  }
+
   // The computed rules normally only corroborate. A statutory date missing from MyHora is
   // far more often a cabinet cancellation than a scrape failure, and reinstating it would
   // publish a day that government offices are actually open.
   //
   // They are promoted to a real source only when the primary returned nothing at all,
   // which means the page itself failed rather than the calendar having changed.
-  const primaryFailed = primary.records.length === 0;
   sources.push({
     source: 'rules',
     url: 'computed from statute — see src/rules/fixed.ts',
     records: fixedHolidays(yearBe),
     warnings: primaryFailed
-      ? ['MyHora returned no rows, so the year was rebuilt from statutory rules alone. ' +
-         'Lunar dates, วันพืชมงคล and every มติ ครม. are missing. Do not merge this.']
+      ? ['MyHora returned no rows, so the year was rebuilt from statutory rules and the ' +
+         'lunar calendar alone. วันพืชมงคล, substitutions and every มติ ครม. are missing. ' +
+         'Do not merge this.']
       : [],
+    corroborateOnly: !primaryFailed,
+  });
+  // The lunar calendar follows the same rule: a witness to MyHora's Buddhist holidays, and
+  // a stand-in for them only if the page returned nothing.
+  sources.push({
+    source: 'lunar-calendar',
+    url: 'computed from the Thai lunar calendar — see src/rules/lunar.ts',
+    records: lunarHolidays(yearBe),
+    warnings: [],
     corroborateOnly: !primaryFailed,
   });
 

@@ -1,4 +1,5 @@
 import type { HolidayYear, SourceId, SourceResult } from './schema.js';
+import { isWeekend } from './rules/dates.js';
 
 /**
  * MyHora sits behind Cloudflare, which serves an interstitial challenge to datacenter
@@ -18,58 +19,83 @@ export interface WatchFinding {
   date: string;
   source: SourceId;
   name_th: string;
-  /** `cabinet` findings are the urgent ones: BOT only lists specially granted days. */
+  /**
+   * `cabinet` findings are the urgent ones: BOT only lists specially granted days, and a
+   * new มติ ครม. usually reaches it first. They still need checking — a BOT grant can be
+   * for banks only.
+   */
   severity: 'cabinet' | 'possible';
   detail: string;
 }
 
 /**
- * Google counts วันแรงงาน as a public holiday, and its compensatory day with it. Both are
- * days off for banks and the private sector and working days for government offices, so
- * they surface here every single year. A watchdog that reports a known-wrong result on
- * every run teaches you to ignore it, so this one class is filtered out.
+ * Google and python-holidays both count วันแรงงาน as a public holiday, and its compensatory
+ * day with it. Both are days off for banks and the private sector and working days for
+ * government offices, so they would surface every single year. A watchdog that reports a
+ * known-wrong result on every run teaches you to ignore it, so this one class is filtered out.
  */
-const GOOGLE_KNOWN_WRONG = /แรงงาน/;
+const LABOUR_DAY = /แรงงาน/;
+
+const DETAIL: Record<string, { missing: string; working: string }> = {
+  'bot-html': {
+    missing:
+      'BOT grants banks a special day off here that the data does not have. Bank and ' +
+      'government holidays differ, so this is not proof offices close — but a new มติ ครม. ' +
+      'usually shows up here first. Check the resolution before adding it.',
+    working:
+      'BOT grants banks a special day off here, but the data has it as a working day for ' +
+      'government offices. That may be right — check whether ครม. granted it too',
+  },
+  'google-ics': {
+    missing:
+      'Google lists this as a public holiday, but it is not in the data. Google is often ' +
+      'wrong on its own, so confirm before acting.',
+    working: '',
+  },
+  'python-holidays': {
+    missing:
+      'python-holidays has a weekday day off here that the data lacks. It is maintained by ' +
+      'hand against มติ ครม., so check the resolution before acting.',
+    working: 'python-holidays has a weekday day off here, but the data has it as a working day',
+  },
+};
 
 export function compareYear(committed: HolidayYear, reachable: SourceResult[]): WatchFinding[] {
   const known = new Map(committed.holidays.map((h) => [h.date, h]));
   const findings: WatchFinding[] = [];
 
   for (const source of reachable) {
+    const detail = DETAIL[source.source];
+    if (!detail) continue;
+    const isCabinetWitness = source.source === 'bot-html';
+
     for (const record of source.records) {
       if (!record.date.startsWith(`${committed.year}-`)) continue;
-      if (source.source === 'google-ics' && GOOGLE_KNOWN_WRONG.test(record.name_th)) continue;
+      if (!isCabinetWitness && LABOUR_DAY.test(record.name_th)) continue;
+      // python-holidays lists observances that land on a weekend, which the data records
+      // as non-days-off with a separate substitution. Only its weekdays are claims about
+      // whether offices close.
+      if (source.source === 'python-holidays' && isWeekend(record.date)) continue;
+
+      const finding = (text: string): WatchFinding => ({
+        yearBe: committed.year_be,
+        date: record.date,
+        source: source.source,
+        name_th: record.name_th,
+        severity: isCabinetWitness ? 'cabinet' : 'possible',
+        detail: text,
+      });
 
       const existing = known.get(record.date);
-      const isCabinetWitness = source.source === 'bot-html';
-
       if (!existing) {
-        findings.push({
-          yearBe: committed.year_be,
-          date: record.date,
-          source: source.source,
-          name_th: record.name_th,
-          severity: isCabinetWitness ? 'cabinet' : 'possible',
-          detail: isCabinetWitness
-            ? 'BOT announces this as a specially granted day off, but it is not in the data at all. ' +
-              'This is what a fresh มติ ครม. looks like.'
-            : 'Google lists this as a public holiday, but it is not in the data. Google is often ' +
-              'wrong on its own, so confirm before acting.',
-        });
+        findings.push(finding(detail.missing));
         continue;
       }
 
-      // BOT disagreeing about whether a known date is a day off matters; Google disagreeing
-      // does not, because Google wrongly counts วันแรงงาน and bank-only days as public.
-      if (isCabinetWitness && !existing.is_day_off) {
-        findings.push({
-          yearBe: committed.year_be,
-          date: record.date,
-          source: source.source,
-          name_th: record.name_th,
-          severity: 'cabinet',
-          detail: `BOT treats this as a granted day off, but the data has it as a working day (${existing.name_th}).`,
-        });
+      // A known date the data calls a working day matters from BOT and python-holidays;
+      // not from Google, which wrongly counts bank-only days as public.
+      if (detail.working && !existing.is_day_off) {
+        findings.push(finding(`${detail.working} (${existing.name_th}).`));
       }
     }
   }
@@ -83,16 +109,17 @@ export function renderWatchReport(findings: WatchFinding[]): string {
 
   lines.push(
     'The daily watch compared the sources reachable from GitHub Actions — the Bank of',
-    'Thailand and Google — against the data committed here, and found dates they know',
-    'about that this repository does not.',
+    'Thailand, Google and python-holidays — against the data committed here, and found',
+    'days off they know about that this repository does not.',
     '',
   );
 
   if (cabinet.length > 0) {
     lines.push(
       '> [!IMPORTANT]',
-      '> The Bank of Thailand is reporting a specially granted day off that is missing here.',
-      '> BOT follows ครม. for one-off grants, so this most likely means a new มติ ครม.',
+      '> The Bank of Thailand granted banks a special day off that is missing here. BOT',
+      '> usually follows ครม. for one-off grants, but bank and government holidays differ:',
+      '> confirm a มติ ครม. covers government offices before adding it.',
       '',
     );
   }

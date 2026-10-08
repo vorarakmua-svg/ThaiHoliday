@@ -5,7 +5,7 @@ export interface YearDiff {
   added: Holiday[];
   removed: Holiday[];
   changed: { before: Holiday; after: Holiday; fields: string[] }[];
-  /** True when a special cabinet holiday appeared or disappeared. */
+  /** True when a special cabinet holiday appeared, disappeared or changed what it grants. */
   cabinetChange: boolean;
 }
 
@@ -19,6 +19,9 @@ const TRACKED: (keyof Holiday)[] = [
   'substitutes_for',
   'cabinet_resolution',
 ];
+
+/** Changes to these on a cabinet day alter whether, or why, offices close. */
+const CABINET_FIELDS: ReadonlySet<string> = new Set(['type', 'is_day_off', 'cabinet_resolution']);
 
 function changedFields(before: Holiday, after: Holiday): string[] {
   return TRACKED.filter(
@@ -41,7 +44,15 @@ export function diffYear(before: HolidayYear | null, after: HolidayYear): YearDi
     if (fields.length > 0) changed.push({ before: old, after: holiday, fields });
   }
 
-  const cabinetChange = [...added, ...removed].some((h) => h.type === 'special_cabinet');
+  // An existing row can become a cabinet day too: ครม. granting a date the table already
+  // lists as a working day shows up as a change, not an addition, and is just as urgent.
+  const cabinetChange =
+    [...added, ...removed].some((h) => h.type === 'special_cabinet') ||
+    changed.some(
+      ({ before: b, after: a, fields }) =>
+        (b.type === 'special_cabinet' || a.type === 'special_cabinet') &&
+        fields.some((f) => CABINET_FIELDS.has(f)),
+    );
 
   return { yearBe: after.year_be, added, removed, changed, cabinetChange };
 }
